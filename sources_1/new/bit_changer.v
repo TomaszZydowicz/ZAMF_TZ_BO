@@ -22,6 +22,8 @@
 module bit_changer #(parameter BPS=16, parameter FRAME_SIZE=8)
 //BPS - bits per sample
                     (
+                        //enable signal
+                        input in_enable,
                         //frame of samples, in each sample BPS bits defined as vector
                         input [FRAME_SIZE*BPS-1:0] in_frame ,
                         //part of message 
@@ -29,9 +31,10 @@ module bit_changer #(parameter BPS=16, parameter FRAME_SIZE=8)
                         //frame with changed LSB
                         output [FRAME_SIZE*BPS-1:0] out_frame //reg or wire? - wire dangerous if frame is big 
                      );
-                                    
     genvar i;
-    generate 
+    generate                              
+    //always @(*);
+        //if (in_enable == 1'b1)
         for (i=0 ; i < FRAME_SIZE*BPS ; i=i+1)
             begin //: CHANGE_LSB
                 if ((i % BPS) == 0)
@@ -39,5 +42,5 @@ module bit_changer #(parameter BPS=16, parameter FRAME_SIZE=8)
                 else
                     assign out_frame[i] = in_frame[i];  
             end
-    endgenerate        
+     endgenerate      
 endmodule

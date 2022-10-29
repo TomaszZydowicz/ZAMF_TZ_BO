@@ -1,18 +1,27 @@
-//////////////////////////////////////////////////////////////////////
-// File Downloaded from http://www.nandland.com
-//////////////////////////////////////////////////////////////////////
- 
-// This testbench will exercise both the UART Tx and Rx.
-// It sends out byte 0xAB over the transmitter
-// It then exercises the receive by receiving byte 0x3F
-`timescale 1ns/10ps
- 
-//`include "uart_tx.v"
-//`include "uart_rx.v"
- 
-module tb_uart ();
- 
-  // Testbench uses a 10 MHz clock
+`timescale 1ns / 10ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 29.10.2022 22:28:02
+// Design Name: 
+// Module Name: tb2_uart
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module tb2_uart ();
+// Testbench uses a 10 MHz clock
   // Want to interface to 115200 baud UART
   // 10000000 / 115200 = 87 Clocks Per Bit.
   parameter c_CLOCK_PERIOD_NS = 100;
@@ -83,7 +92,7 @@ module tb_uart ();
       @(posedge r_Clock);
       r_Tx_DV <= 1'b1;
       r_Tx_Byte <= 8'hAB;
-      @(posedge r_Clock)
+      #(c_CLOCK_PERIOD_NS*c_CLKS_PER_BIT) ;
       r_Tx_DV <= 1'b0;
       @(posedge w_Tx_Done);
        
@@ -99,5 +108,4 @@ module tb_uart ();
         $display("Test Failed - Incorrect Byte Received");
        
     end
-   
 endmodule
