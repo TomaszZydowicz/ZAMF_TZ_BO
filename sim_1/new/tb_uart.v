@@ -25,6 +25,7 @@ module tb_uart ();
   reg [7:0] r_Tx_Byte = 0;
   reg r_Rx_Serial = 1;
   wire [7:0] w_Rx_Byte;
+  wire w_rx_ready;
    
  
   // Takes in input byte and serializes it 
@@ -56,7 +57,7 @@ module tb_uart ();
   uart_rx #(.CLKS_PER_BIT(c_CLKS_PER_BIT)) UART_RX_INST
     (.i_Clock(r_Clock),
      .i_Rx_Serial(r_Rx_Serial),
-     .o_Rx_DV(),
+     .o_Rx_DV(w_rx_ready),
      .o_Rx_Byte(w_Rx_Byte)
      );
    
@@ -79,13 +80,13 @@ module tb_uart ();
     begin
        
       // Tell UART to send a command (exercise Tx)
-      @(posedge r_Clock);
-      @(posedge r_Clock);
-      r_Tx_DV <= 1'b1;
-      r_Tx_Byte <= 8'hAB;
-      @(posedge r_Clock)
-      r_Tx_DV <= 1'b0;
-      @(posedge w_Tx_Done);
+//      @(posedge r_Clock);
+//      @(posedge r_Clock);
+//      r_Tx_DV <= 1'b1;
+//      r_Tx_Byte <= 8'hAB;
+//      @(posedge r_Clock)
+//      r_Tx_DV <= 1'b0;
+//      @(posedge w_Tx_Done);
        
       // Send a command to the UART (exercise Rx)
       @(posedge r_Clock);
