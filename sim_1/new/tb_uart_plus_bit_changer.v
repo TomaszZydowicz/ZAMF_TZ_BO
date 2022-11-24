@@ -42,6 +42,13 @@ module tb_uart_plus_bit_changer();
     wire UART_READY;
     wire [15:0] SAMPLE;
     wire U2S_READY;
+    wire TX_ACTIVE;
+    wire [7:0] S2U_FRAME;
+    wire S2U_READY;
+    wire [7:0] TX_OUT_FRAME;
+    wire TX_DONE;
+
+
 
     bit_changer_seq #(.BPS(BPS), .FRAME_SIZE(FRAME_SIZE)) bcs1 (
                   .in_clk(CLK),
@@ -52,27 +59,42 @@ module tb_uart_plus_bit_changer();
                   .out_ready(OUT_READY));
                   
     uart2sample u2s (
-            .in_clk(CLK),
-            .in_uart_ready(UART_READY),
-            .in_uart_frame(w_Rx_Byte),
-            .out_frame(SAMPLE),
-            .out_ready(U2S_READY)
-    );
+                .in_clk(CLK),
+                .in_uart_ready(UART_READY),
+                .in_uart_frame(w_Rx_Byte),
+                .out_frame(SAMPLE),
+                .out_ready(U2S_READY));
                   
       uart_rx #(.CLKS_PER_BIT(c_CLKS_PER_BIT)) UART_RX_INST
-    (.i_Clock(CLK),
-     .i_Rx_Serial(r_Rx_Serial),
-     .o_Rx_DV(UART_READY),
-     .o_Rx_Byte(w_Rx_Byte)
-     );
+                (.i_Clock(CLK),
+                 .i_Rx_Serial(r_Rx_Serial),
+                 .o_Rx_DV(UART_READY),
+                 .o_Rx_Byte(w_Rx_Byte));
+             
+     sample2uart s2u(
+                    //clock
+                    .in_clk(CLK),
+                    //tx ready
+                    .tx_busy(TX_ACTIVE),
+                    //uart ready signal
+                    .in_bit_changer_ready(OUT_READY),
+                    //8 bit uart frame
+                    .in_sample(OUT_FRAME),
+                    //16 bit depth sample
+                    .out_uart_frame(S2U_FRAME),
+                    //ready signal
+                    .out_ready(S2U_READY));
+         
+     
+     
      
      uart_tx #(.CLKS_PER_BIT(c_CLKS_PER_BIT)) UART_TX_INST
-     ( .i_Clock(),
-       .i_Tx_DV(),
-       .i_Tx_Byte(), 
-       .o_Tx_Active(),
-       .o_Tx_Serial(),
-       .o_Tx_Done()
+     ( .i_Clock(CLK),
+       .i_Tx_DV(S2U_READY),
+       .i_Tx_Byte(S2U_FRAME), 
+       .o_Tx_Active(TX_ACTIVE),
+       .o_Tx_Serial(TX_OUT_FRAME),
+       .o_Tx_Done(TX_DONE)
      );
      
     task UART_WRITE_BYTE;
