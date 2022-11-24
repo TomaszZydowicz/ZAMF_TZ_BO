@@ -2,7 +2,7 @@ module clock_divider (
 
     input   clk_in,
     input   mode_in,
-    output  reg clk_out = 0
+    output  reg clk_out
 
     );
 
