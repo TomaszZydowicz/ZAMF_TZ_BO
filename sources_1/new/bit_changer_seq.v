@@ -60,7 +60,7 @@ module bit_changer_seq #(parameter BPS=16, parameter FRAME_SIZE=8)
                                 state <= s_CODE;
                             end
                         else
-                            r_out_frame <= {FRAME_SIZE*BPS{1'b0}};  //czy zerowwaæ tu wartoœæ? czy trzymaæ wartoœæ d³u¿ej?
+                            //r_out_frame <= {FRAME_SIZE*BPS{1'b0}};  //czy zerowwaæ tu wartoœæ? czy trzymaæ wartoœæ d³u¿ej?
                             r_out_ready <= 1'b0;
                     end
                 

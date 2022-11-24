@@ -2,13 +2,13 @@ module clock_divider (
 
     input   clk_in,
     input   mode_in,
-    output  reg clk_out
+    output  reg clk_out=0
 
     );
 
     reg[27:0] COUNTER       =   28'd0;
-    parameter DIVISOR_1     =   28'd2500;
-    parameter DIVISOR_2     =   28'd60000000;
+    parameter DIVISOR_1     =   28'd2500; //from 50Mhz to 44.1kHz    //28'd2500;
+    parameter DIVISOR_2     =   28'd60000000;//from 50Mhz to 2Hz
     
     
     always @(posedge clk_in)
