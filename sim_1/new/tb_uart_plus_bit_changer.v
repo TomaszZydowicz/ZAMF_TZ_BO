@@ -24,7 +24,7 @@ module tb_uart_plus_bit_changer();
 
 
     localparam FRAME_SIZE = 1;
-    localparam BPS = 8;
+    localparam BPS = 16;
     localparam T = 10;
     localparam c_CLOCK_PERIOD_NS = 100;
     localparam c_CLKS_PER_BIT    = 87;
@@ -40,21 +40,39 @@ module tb_uart_plus_bit_changer();
     reg r_Rx_Serial = 1;
     wire [7:0] w_Rx_Byte;
     wire UART_READY;
-
+    wire [15:0] SAMPLE;
+    wire U2S_READY;
 
     bit_changer_seq #(.BPS(BPS), .FRAME_SIZE(FRAME_SIZE)) bcs1 (
                   .in_clk(CLK),
-                  .in_enable(UART_READY),
-                  .in_frame(w_Rx_Byte),
+                  .in_enable(U2S_READY),
+                  .in_frame(SAMPLE),
                   .in_message(IN_MESSAGE),
                   .out_frame(OUT_FRAME),
                   .out_ready(OUT_READY));
+                  
+    uart2sample u2s (
+            .in_clk(CLK),
+            .in_uart_ready(UART_READY),
+            .in_uart_frame(w_Rx_Byte),
+            .out_frame(SAMPLE),
+            .out_ready(U2S_READY)
+    );
                   
       uart_rx #(.CLKS_PER_BIT(c_CLKS_PER_BIT)) UART_RX_INST
     (.i_Clock(CLK),
      .i_Rx_Serial(r_Rx_Serial),
      .o_Rx_DV(UART_READY),
      .o_Rx_Byte(w_Rx_Byte)
+     );
+     
+     uart_tx #(.CLKS_PER_BIT(c_CLKS_PER_BIT)) UART_TX_INST
+     ( .i_Clock(),
+       .i_Tx_DV(),
+       .i_Tx_Byte(), 
+       .o_Tx_Active(),
+       .o_Tx_Serial(),
+       .o_Tx_Done()
      );
      
     task UART_WRITE_BYTE;
@@ -100,6 +118,13 @@ module tb_uart_plus_bit_changer();
             create_new_message(IN_MESSAGE);
             #(T)
             UART_WRITE_BYTE(8'h3F);
+            #(T)
+            UART_WRITE_BYTE(8'hFF);
+            #(T)
+            create_new_message(IN_MESSAGE);
+            UART_WRITE_BYTE(8'h01);
+            #(T)
+            UART_WRITE_BYTE(8'hF0);
             #(T)
             @(posedge OUT_READY);
        
