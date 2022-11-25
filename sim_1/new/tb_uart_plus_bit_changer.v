@@ -45,7 +45,7 @@ module tb_uart_plus_bit_changer();
     wire TX_ACTIVE;
     wire [7:0] S2U_FRAME;
     wire S2U_READY;
-    wire [7:0] TX_OUT_FRAME;
+    wire TX_OUT_SERIAL;
     wire TX_DONE;
 
 
@@ -93,7 +93,7 @@ module tb_uart_plus_bit_changer();
        .i_Tx_DV(S2U_READY),
        .i_Tx_Byte(S2U_FRAME), 
        .o_Tx_Active(TX_ACTIVE),
-       .o_Tx_Serial(TX_OUT_FRAME),
+       .o_Tx_Serial(TX_OUT_SERIAL),
        .o_Tx_Done(TX_DONE)
      );
      
@@ -143,10 +143,10 @@ module tb_uart_plus_bit_changer();
             #(T)
             UART_WRITE_BYTE(8'hFF);
             #(T)
-            create_new_message(IN_MESSAGE);
-            UART_WRITE_BYTE(8'h01);
-            #(T)
-            UART_WRITE_BYTE(8'hF0);
+//            create_new_message(IN_MESSAGE);
+//            UART_WRITE_BYTE(8'h01);
+//            #(T)
+//            UART_WRITE_BYTE(8'hF0);
             #(T)
             @(posedge OUT_READY);
        
