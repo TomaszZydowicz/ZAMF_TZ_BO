@@ -19,7 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-module bit_changer_seq #(parameter BPS=16, parameter FRAME_SIZE=8)
+module bit_changer_seq #(parameter BPS=16, parameter FRAME_SIZE=1)
 //BPS - bits per sample
                     (
                         //clock
