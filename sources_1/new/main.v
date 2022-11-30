@@ -103,6 +103,21 @@ module main #(parameter BPS=16, parameter FRAME_SIZE=1, parameter CLKS_PER_BIT=8
        .o_Tx_Done(tx_done)
      );
      
+     fifo_buffer fb(
+        .clk(),
+        .srst(),
+        .din(),
+        .wr_en(),
+        .full(),
+        .dout(),
+        .rd_en(),
+        .empty(),
+        .data_count(),
+        .prog_full(),
+        .overflow(),
+        .prog_empty(),
+        .underflow()
+      );
      
 
         
