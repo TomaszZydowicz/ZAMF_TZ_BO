@@ -44,7 +44,7 @@ module uart2sample(
                     reg_out_ready <= 1'b0;
                     if (in_uart_ready == 1'b1)
                     begin
-                        reg_frame[15:8] <= in_uart_frame; 
+                        reg_frame[7:0] <= in_uart_frame; 
                         uart_frame_counter <= 1'b1;
                     end    
                 end
@@ -52,7 +52,7 @@ module uart2sample(
             begin 
                 if (in_uart_ready == 1'b1)
                 begin
-                    reg_frame[7:0] <= in_uart_frame; 
+                    reg_frame[15:8] <= in_uart_frame; 
                     uart_frame_counter <= 1'b0;
                     reg_out_ready <= 1'b1;
                 end    

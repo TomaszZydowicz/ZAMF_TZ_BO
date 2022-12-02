@@ -30,6 +30,10 @@ module main #(parameter BPS=16, parameter FRAME_SIZE=1, parameter CLKS_PER_BIT=8
     input rx_serial,
    // message to code
     input [FRAME_SIZE-1:0] in_message,
+    // mode uart/i2s 2HZ/i2s 44.1kHZ
+    input [1:0] in_mode,
+    //reset
+    input in_reset,
     // tx serial output
     output tx_serial,
     // tx done
@@ -37,16 +41,6 @@ module main #(parameter BPS=16, parameter FRAME_SIZE=1, parameter CLKS_PER_BIT=8
     );
     
     
-
-    
-
-
-
-
-
-
-
-
     wire uart_rx_frame_done;
     wire [7:0] uart_rx_frame;
      
@@ -77,20 +71,61 @@ module main #(parameter BPS=16, parameter FRAME_SIZE=1, parameter CLKS_PER_BIT=8
                   .out_frame(bit_changer_sample),
                   .out_ready(bit_changer_ready));
      
+    wire[FRAME_SIZE*BPS-1:0] fifo_buffer_out;
+    wire fifo_buffer_read_en; 
+    wire fifo_empty; 
+     
+    fifo_buffer fb(
+        .clk(in_clk),
+        .srst(in_reset),
+        .din(bit_changer_sample),
+        .wr_en(bit_changer_ready),
+        .full(),
+        .dout(fifo_buffer_out),
+        .rd_en(fifo_buffer_read_en),
+        .empty(fifo_empty),
+        .data_count(),
+        .prog_full(),
+        .overflow(),
+        .prog_empty(),
+        .underflow()
+      );
+    
+    wire [15:0] w_out_uart_sample;
+    wire [15:0] out_i2s441kH_sample;
+    wire [15:0] out_i2s2H_sample;
+    wire w_uart_tx_en;
+    wire w_i2s2H_en;
+    wire w_i2s441kH_en;
+    wire sample2uart_ready;
+    
+    sample_switch ss(
+        .in_clk(in_clk),
+        .in_sample(fifo_buffer_out) ,
+        .in_mode(in_mode),
+        .in_sample2uart_ready(sample2uart_ready),
+        .in_fifo_empty(fifo_empty),
+        .out_uart_sample(w_out_uart_sample),
+        .out_i2s441kH_sample(out_i2s441kH_sample),
+        .out_i2s2H_sample(out_i2s2H_sample),
+        .fifo_en(fifo_buffer_read_en),
+        .sample2uart_en(w_uart_tx_en),
+        .i2s2H_en(w_i2s2H_en),
+        .i2s441kH_en(w_i2s441kH_en));
+     
+    
      wire uart_tx_active;
      wire [7:0] s2u_sample_split;
      wire s2u_ready;
      
-
-
-
      sample2uart s2u(
                     .in_clk(in_clk),
                     .tx_busy(uart_tx_active),
-                    .in_bit_changer_ready(bit_changer_ready),
-                    .in_sample(bit_changer_sample),
+                    .in_en(w_uart_tx_en),
+                    .in_sample(w_out_uart_sample),
                     .out_uart_frame(s2u_sample_split),
-                    .out_ready(s2u_ready));
+                    .out_ready_uart(s2u_ready),
+                    .out_ready_sample_switch(sample2uart_ready));
          
      
 
@@ -103,21 +138,7 @@ module main #(parameter BPS=16, parameter FRAME_SIZE=1, parameter CLKS_PER_BIT=8
        .o_Tx_Done(tx_done)
      );
      
-     fifo_buffer fb(
-        .clk(),
-        .srst(),
-        .din(),
-        .wr_en(),
-        .full(),
-        .dout(),
-        .rd_en(),
-        .empty(),
-        .data_count(),
-        .prog_full(),
-        .overflow(),
-        .prog_empty(),
-        .underflow()
-      );
+    
      
 
         

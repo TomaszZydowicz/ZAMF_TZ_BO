@@ -30,14 +30,20 @@ module tb_main();
     reg CLK = 0;
     reg[FRAME_SIZE-1:0] IN_MESSAGE = 0;
     reg r_rx_serial = 1;
+    reg [1:0] mode = 0;
+    reg reset= 0;
     
+    reg [15:0] out_frame; 
     wire tx_serial;
     wire tx_done;
+    
     
     main #(.BPS(BPS), .FRAME_SIZE(FRAME_SIZE), .CLKS_PER_BIT(CLKS_PER_BIT)) m (
             .in_clk(CLK),
             .rx_serial(r_rx_serial),
             .in_message(IN_MESSAGE),
+            .in_mode(mode),
+            .in_reset(reset),
             .tx_serial(tx_serial),
             .tx_done(tx_done)
     );
@@ -87,17 +93,23 @@ module tb_main();
     initial
         begin
             CLK = 1'b0;
+            mode = 2'b01;
             create_new_message(IN_MESSAGE);
             #(T)
             UART_WRITE_BYTE(8'h3F);
             #(T)
+            UART_WRITE_BYTE(8'h03);
+            #(T)
+            UART_WRITE_BYTE(8'h33);
+            #(T)
             UART_WRITE_BYTE(8'hFF);
             #(T)
+            
 //            create_new_message(IN_MESSAGE);
 //            UART_WRITE_BYTE(8'h01);
 //            #(T)
 //            UART_WRITE_BYTE(8'hF0);
-            #(T)
+            #(10000*T)
        
           
 
