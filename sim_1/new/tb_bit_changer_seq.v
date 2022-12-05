@@ -3,7 +3,7 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 29.10.2022 23:49:28
+// Create Date: 29.10.2022 23:59:28
 // Design Name: 
 // Module Name: tb_bit_changer_seq
 // Project Name: 
@@ -109,7 +109,7 @@ initial
         
 //        create_new_frame(IN_FRAME);
 //        create_new_message(IN_MESSAGE); 
-//        #(T*4)
+//        #(T*5)
 //        $display("Third frame");
 //        display_LSB(IN_MESSAGE,OUT_FRAME);
         

@@ -81,7 +81,7 @@ initial
         
         create_new_frame(IN_FRAME);
         create_new_message(IN_MESSAGE); 
-        #(T*4)
+        #(T*5)
         $display("Third frame");
         display_LSB(IN_MESSAGE,OUT_FRAME);
         

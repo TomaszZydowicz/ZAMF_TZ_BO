@@ -64,7 +64,6 @@ module fifo_buffer (
   overflow,
   empty,
   underflow,
-  data_count,
   prog_full,
   prog_empty
 );
@@ -74,20 +73,19 @@ module fifo_buffer (
 input wire clk;
 input wire srst;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *)
-input wire [15 : 0] din;
+input wire [23 : 0] din;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_EN" *)
 input wire wr_en;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_EN" *)
 input wire rd_en;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_DATA" *)
-output wire [15 : 0] dout;
+output wire [23 : 0] dout;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE FULL" *)
 output wire full;
 output wire overflow;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ EMPTY" *)
 output wire empty;
 output wire underflow;
-output wire [9 : 0] data_count;
 output wire prog_full;
 output wire prog_empty;
 
@@ -97,16 +95,16 @@ output wire prog_empty;
     .C_COUNT_TYPE(0),
     .C_DATA_COUNT_WIDTH(10),
     .C_DEFAULT_VALUE("BlankString"),
-    .C_DIN_WIDTH(16),
+    .C_DIN_WIDTH(24),
     .C_DOUT_RST_VAL("0"),
-    .C_DOUT_WIDTH(16),
+    .C_DOUT_WIDTH(24),
     .C_ENABLE_RLOCS(0),
     .C_FAMILY("zynq"),
     .C_FULL_FLAGS_RST_VAL(0),
     .C_HAS_ALMOST_EMPTY(0),
     .C_HAS_ALMOST_FULL(0),
     .C_HAS_BACKUP(0),
-    .C_HAS_DATA_COUNT(1),
+    .C_HAS_DATA_COUNT(0),
     .C_HAS_INT_CLK(0),
     .C_HAS_MEMINIT_FILE(0),
     .C_HAS_OVERFLOW(1),
@@ -127,7 +125,7 @@ output wire prog_empty;
     .C_OVERFLOW_LOW(0),
     .C_PRELOAD_LATENCY(1),
     .C_PRELOAD_REGS(0),
-    .C_PRIM_FIFO_TYPE("1kx18"),
+    .C_PRIM_FIFO_TYPE("1kx36"),
     .C_PROG_EMPTY_THRESH_ASSERT_VAL(512),
     .C_PROG_EMPTY_THRESH_NEGATE_VAL(513),
     .C_PROG_EMPTY_TYPE(1),
@@ -326,7 +324,7 @@ output wire prog_empty;
     .almost_empty(),
     .valid(),
     .underflow(underflow),
-    .data_count(data_count),
+    .data_count(),
     .rd_data_count(),
     .wr_data_count(),
     .prog_full(prog_full),

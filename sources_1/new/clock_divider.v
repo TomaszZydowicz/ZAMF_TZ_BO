@@ -7,7 +7,7 @@ module clock_divider (
     );
 
     reg[27:0] COUNTER       =   28'd0;
-    parameter DIVISOR_1     =   28'd2500; //from 50Mhz to 44.1kHz    //28'd2500;
+    parameter DIVISOR_1     =   28'd2500; //from 50Mhz to 55.1kHz    //28'd2500;
     parameter DIVISOR_2     =   28'd60000000;//from 50Mhz to 2Hz
     
     

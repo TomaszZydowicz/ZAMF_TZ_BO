@@ -1,4 +1,7 @@
-// (c) Copyright 1995-2022 Xilinx, Inc. All rights reserved.
+
+// file: clk_wiz_0.v
+// 
+// (c) Copyright 2008 - 2013 Xilinx, Inc. All rights reserved.
 // 
 // This file contains confidential and proprietary information
 // of Xilinx, Inc. and is protected under U.S. and
@@ -44,33 +47,40 @@
 // THIS COPYRIGHT NOTICE AND DISCLAIMER MUST BE RETAINED AS
 // PART OF THIS FILE AT ALL TIMES.
 // 
-// DO NOT MODIFY THIS FILE.
+//----------------------------------------------------------------------------
+// User entered comments
+//----------------------------------------------------------------------------
+// None
+//
+//----------------------------------------------------------------------------
+//  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
+//   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
+//----------------------------------------------------------------------------
+// clk_out1__12.28801______0.000______50.0______473.813____351.816
+//
+//----------------------------------------------------------------------------
+// Input Clock   Freq (MHz)    Input Jitter (UI)
+//----------------------------------------------------------------------------
+// __primary_____________125____________0.010
 
-// IP VLNV: xilinx.com:ip:fifo_generator:13.2
-// IP Revision: 5
+`timescale 1ps/1ps
 
-// The following must be inserted into your Verilog file for this
-// core to be instantiated. Change the instance name and port connections
-// (in parentheses) to your own signal names.
+(* CORE_GENERATION_INFO = "clk_wiz_0,clk_wiz_v6_0_4_0_0,{component_name=clk_wiz_0,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=MMCM,num_out_clk=1,clkin1_period=8.000,clkin2_period=10.000,use_power_down=false,use_reset=false,use_locked=false,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}" *)
 
-//----------- Begin Cut here for INSTANTIATION Template ---// INST_TAG
-fifo_buffer your_instance_name (
-  .clk(clk),                // input wire clk
-  .srst(srst),              // input wire srst
-  .din(din),                // input wire [23 : 0] din
-  .wr_en(wr_en),            // input wire wr_en
-  .rd_en(rd_en),            // input wire rd_en
-  .dout(dout),              // output wire [23 : 0] dout
-  .full(full),              // output wire full
-  .overflow(overflow),      // output wire overflow
-  .empty(empty),            // output wire empty
-  .underflow(underflow),    // output wire underflow
-  .prog_full(prog_full),    // output wire prog_full
-  .prog_empty(prog_empty)  // output wire prog_empty
-);
-// INST_TAG_END ------ End INSTANTIATION Template ---------
+module clk_wiz_0 
+ (
+  // Clock out ports
+  output        clk_out1,
+ // Clock in ports
+  input         clk_in1
+ );
 
-// You must compile the wrapper file fifo_buffer.v when simulating
-// the core, fifo_buffer. When compiling the wrapper file, be sure to
-// reference the Verilog simulation library.
+  clk_wiz_0_clk_wiz inst
+  (
+  // Clock out ports  
+  .clk_out1(clk_out1),
+ // Clock in ports
+  .clk_in1(clk_in1)
+  );
 
+endmodule

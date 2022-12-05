@@ -3,7 +3,7 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 29.10.2022 23:03:04
+// Create Date: 29.10.2022 23:03:05
 // Design Name: 
 // Module Name: bit_changer_seq
 // Project Name: 
@@ -19,7 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-module bit_changer_seq #(parameter BPS=16, parameter FRAME_SIZE=1)
+module bit_changer_seq #(parameter BPS=24)
 //BPS - bits per sample
                     (
                         //clock
@@ -27,11 +27,11 @@ module bit_changer_seq #(parameter BPS=16, parameter FRAME_SIZE=1)
                         //enable signal active high
                         input in_enable,
                         //frame of samples, in each sample BPS bits defined as vector
-                        input [FRAME_SIZE*BPS-1:0] in_frame,
+                        input [BPS-1:0] in_frame,
                         //part of message 
-                        input [FRAME_SIZE-1:0] in_message,
+                        input in_message,
                         //frame with changed LSB
-                        output [FRAME_SIZE*BPS-1:0] out_frame, //reg or wire? - wire dangerous if frame is big 
+                        output [BPS-1:0] out_frame, //reg or wire? - wire dangerous if frame is big 
                         //ready signal
                         output out_ready
                      );
@@ -44,9 +44,9 @@ module bit_changer_seq #(parameter BPS=16, parameter FRAME_SIZE=1)
     integer i = 0;
     
     
-    reg [FRAME_SIZE-1:0] r_in_message;
-    reg [FRAME_SIZE*BPS-1:0] r_in_frame = {FRAME_SIZE*BPS{1'b0}};
-    reg [FRAME_SIZE*BPS-1:0] r_out_frame = {FRAME_SIZE*BPS{1'b0}};
+    reg r_in_message;
+    reg [BPS-1:0] r_in_frame = {BPS{1'b0}};
+    reg [BPS-1:0] r_out_frame = {BPS{1'b0}};
     reg r_out_ready = 0;
     
     always @(posedge in_clk)
@@ -66,13 +66,14 @@ module bit_changer_seq #(parameter BPS=16, parameter FRAME_SIZE=1)
                 
                 s_CODE:
                     begin
-                        for (i=0 ; i < FRAME_SIZE*BPS ; i=i+1)
-                            begin //: CHANGE_LSB
-                                if ((i % BPS) == 0)
-                                    r_out_frame[i] <= in_message[i/BPS];
-                                else
-                                    r_out_frame[i] = in_frame[i];  
-                            end
+//                        for (i=0 ; i < BPS ; i=i+1)
+//                            begin //: CHANGE_LSB
+//                                if ((i % BPS) == 0)
+//                                    r_out_frame[i] <= in_message[i/BPS];
+//                                else
+//                                    r_out_frame[i] = in_frame[i];  
+//                            end
+                        r_out_frame <= {in_frame[BPS-1:1] ,  in_message};
                         state <= s_STOP;
                      end
                     

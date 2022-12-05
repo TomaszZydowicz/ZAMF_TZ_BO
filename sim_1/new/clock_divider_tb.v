@@ -20,12 +20,12 @@ initial
     end
 always 
     begin
-        #416666 clk_in = 1'b1;
-        #416666 clk_in = 1'b0;
-        #416667 clk_in = 1'b1;
-        #416666 clk_in = 1'b0;
-        #416666 clk_in = 1'b1;
-        #416667 clk_in = 1'b0;
+        #516666 clk_in = 1'b1;
+        #516666 clk_in = 1'b0;
+        #516667 clk_in = 1'b1;
+        #516666 clk_in = 1'b0;
+        #516666 clk_in = 1'b1;
+        #516667 clk_in = 1'b0;
     end
 
     initial $monitor("time=%g,clk_in=%b,clk_out=%b",$time,clk_in,clk_out);

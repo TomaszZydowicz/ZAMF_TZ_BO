@@ -1,4 +1,6 @@
-// (c) Copyright 1995-2022 Xilinx, Inc. All rights reserved.
+
+// 
+// (c) Copyright 2008 - 2013 Xilinx, Inc. All rights reserved.
 // 
 // This file contains confidential and proprietary information
 // of Xilinx, Inc. and is protected under U.S. and
@@ -44,33 +46,32 @@
 // THIS COPYRIGHT NOTICE AND DISCLAIMER MUST BE RETAINED AS
 // PART OF THIS FILE AT ALL TIMES.
 // 
-// DO NOT MODIFY THIS FILE.
-
-// IP VLNV: xilinx.com:ip:fifo_generator:13.2
-// IP Revision: 5
+//----------------------------------------------------------------------------
+// User entered comments
+//----------------------------------------------------------------------------
+// None
+//
+//----------------------------------------------------------------------------
+//  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
+//   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
+//----------------------------------------------------------------------------
+// clk_out1__12.28801______0.000______50.0______473.813____351.816
+//
+//----------------------------------------------------------------------------
+// Input Clock   Freq (MHz)    Input Jitter (UI)
+//----------------------------------------------------------------------------
+// __primary_____________125____________0.010
 
 // The following must be inserted into your Verilog file for this
 // core to be instantiated. Change the instance name and port connections
 // (in parentheses) to your own signal names.
 
 //----------- Begin Cut here for INSTANTIATION Template ---// INST_TAG
-fifo_buffer your_instance_name (
-  .clk(clk),                // input wire clk
-  .srst(srst),              // input wire srst
-  .din(din),                // input wire [23 : 0] din
-  .wr_en(wr_en),            // input wire wr_en
-  .rd_en(rd_en),            // input wire rd_en
-  .dout(dout),              // output wire [23 : 0] dout
-  .full(full),              // output wire full
-  .overflow(overflow),      // output wire overflow
-  .empty(empty),            // output wire empty
-  .underflow(underflow),    // output wire underflow
-  .prog_full(prog_full),    // output wire prog_full
-  .prog_empty(prog_empty)  // output wire prog_empty
-);
+
+  clk_wiz_0 instance_name
+   (
+    // Clock out ports
+    .clk_out1(clk_out1),     // output clk_out1
+   // Clock in ports
+    .clk_in1(clk_in1));      // input clk_in1
 // INST_TAG_END ------ End INSTANTIATION Template ---------
-
-// You must compile the wrapper file fifo_buffer.v when simulating
-// the core, fifo_buffer. When compiling the wrapper file, be sure to
-// reference the Verilog simulation library.
-

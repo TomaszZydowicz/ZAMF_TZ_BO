@@ -56,15 +56,14 @@ COMPONENT fifo_buffer
   PORT (
     clk : IN STD_LOGIC;
     srst : IN STD_LOGIC;
-    din : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    din : IN STD_LOGIC_VECTOR(23 DOWNTO 0);
     wr_en : IN STD_LOGIC;
     rd_en : IN STD_LOGIC;
-    dout : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+    dout : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
     full : OUT STD_LOGIC;
     overflow : OUT STD_LOGIC;
     empty : OUT STD_LOGIC;
     underflow : OUT STD_LOGIC;
-    data_count : OUT STD_LOGIC_VECTOR(9 DOWNTO 0);
     prog_full : OUT STD_LOGIC;
     prog_empty : OUT STD_LOGIC
   );
@@ -87,7 +86,6 @@ your_instance_name : fifo_buffer
     overflow => overflow,
     empty => empty,
     underflow => underflow,
-    data_count => data_count,
     prog_full => prog_full,
     prog_empty => prog_empty
   );
