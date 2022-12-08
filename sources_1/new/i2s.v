@@ -22,30 +22,28 @@
 
 module i2s #(parameter BPS=24)(
     //clock
-    input in_clk, //12.288MHZ
-  	input in_BCLK, //3.072MHZ v 12.288MHz
+    input in_clk, //73.728MHz
     input [BPS-1:0] sample,
     input in_en,
     output out_ready,
     output out_BLCK,
-    output out_PBDAT,
+    output out_PBDAT, //frame has 32 bits, 24bit of sample, 8 bits of X
     output out_PBLRC, //64 BLCK clocks for one PBLRC clock (48kHz) if BCLK = 3.072 v 256 - if BLCK = 12.288
     output out_RECDAT,
     output out_RELCRC,
     output out_SDIN,
     output out_SCLK,
     output out_MUTE,
-    output out_MCLK
+    output out_MCLK //12.288Mhz
     );
     
     parameter IDLE = 1'b0;
     parameter SEND = 1'b1;
-    parameter BIT_CHANGER_MAX_VALUE = 256;
     
     reg reg_out_ready = 1'b1;
-    reg reg_out_BLCK = 1'b0;
+    reg reg_out_BCLK = 1'b1;
     reg reg_out_PBDAT =1'b0;
-    reg reg_out_PBLRC = 1'b0;
+    reg reg_out_PBLRC = 1'b1; //left chanel first
     reg reg_out_RECDAT = 1'b0;
     reg reg_out_RELCRC = 1'b0;
     reg reg_out_SDIN = 1'b0;
@@ -53,194 +51,122 @@ module i2s #(parameter BPS=24)(
     reg reg_out_MUTE = 1'b0;
     reg reg_out_MCLK = 1'b0;
     
-    reg canal_counter = 2'b00;
     //reg [5:0] bit_counter = 5'b10000;
     reg state = IDLE;
     
-    integer bit_counter = BIT_CHANGER_MAX_VALUE;
+    reg [BPS-1:0] bit_counter = 0;
+    reg [BPS-1:0] reg_sample = 0;
+    reg [4:0] BCLK_counter = 0;
+    reg [2:0] MCLK_counter = 0;
+    reg [10:0] PBLRC_counter = 0;
+    reg BCLK_negedge = 0;
+    reg canal_counter = 0;
     
-        always @(negedge in_BCLK)
+    always @(posedge in_clk) //generation of MCLK clock
+        begin
+            if(state == SEND)
+                begin
+                    if (MCLK_counter == 2) // 6 clocks 
+                        begin
+                            reg_out_MCLK <= ~reg_out_MCLK;
+                            MCLK_counter <= 0;
+                        end
+                    else
+                        MCLK_counter <= MCLK_counter + 1;
+                end       
+        end
+    
+    always @(posedge in_clk) //generation of BCLK clock
+        begin
+            if (state == SEND)
+                begin
+                    if (BCLK_counter == 11) //24 clocks
+                        begin
+                            if(reg_out_BCLK == 1)
+                                BCLK_negedge <= 1;
+                            reg_out_BCLK <= ~reg_out_BCLK;
+                            BCLK_counter <= 0;
+                        end     
+                    else
+                        begin
+                            BCLK_counter <= BCLK_counter + 1;
+                            BCLK_negedge <= 0;
+                        end
+                end
+        end
+        
+    //assign BCLK_negedge = (BCLK_counter == 19) & (reg_out_BCLK == 1) ? 1:0; //BCLK negedge flag //20 clocks
+    
+    always @(posedge in_clk) //PBLRC generation
+        begin
+            if (state == SEND)
+            begin
+                if (PBLRC_counter == 767) // PBLRC 48kHz, in_clk 73.728Mhz //1536 clocks
+                    begin
+                        PBLRC_counter <= 0;
+                        bit_counter <= 0; //start of a new chanel
+                        canal_counter = (canal_counter == 0) ? 1 : 0;
+                        reg_out_PBLRC <= ~reg_out_PBLRC;
+                    end
+                else
+                    PBLRC_counter <= PBLRC_counter + 1;
+            end
+        end
+        
+        
+    //assign CANAL_change = (PBLRC_counter == 1279) ? 1:0 ; //canal change flag//1280 clocks
+        
+    always @(posedge in_clk) //bit transmittion in left-justifed audio input mode
         begin
             case(state)
                 IDLE:
                     begin
                         if(in_en == 1'b1)
                             begin
-                                reg_out_MUTE = 1'b1;
-                                reg_out_ready = 1'b0;
-                                canal_counter <= 2'b00;
+                                reg_sample <= sample;
+                                reg_out_MUTE <= 1'b1;
+                                reg_out_ready <= 1'b0;
                                 state <= SEND;
+                            end
+                        else
+                            begin
+                                reg_out_MUTE <= 1'b0;
+                                reg_out_ready <= 1'b1;
+                                reg_out_ready <= 1'b1;
+                                reg_out_BCLK <= 1'b1;
+                                reg_out_PBDAT <= 1'b0;
+                                reg_out_PBLRC <= 1'b1;
+                                state <= IDLE;
                             end
                     end
                 SEND:
+                    if(BCLK_negedge)
                         begin
-                            if(bit_counter < BPS) 
+                            if (bit_counter < 24)
                                 begin
-                                    reg_out_PBDAT <= sample[(BPS-1) - bit_counter];
-                                    bit_counter <= bit_counter +1;
-                                end
-                            else if(bit_counter < (BIT_CHANGER_MAX_VALUE-1))
-                                begin
-                                    reg_out_PBDAT <= 1'b0;
-                                    bit_counter <= bit_counter +1;
-                                    canal_counter <= canal_counter + 1'b1;
+                                    reg_out_PBDAT <= reg_sample[(BPS-1) - bit_counter];
+                                    bit_counter <= bit_counter + 1;
                                 end
                             else
                                 begin
-                                    if (canal_counter == 2'b10)
-                                        begin
-                                            if (in_en == 1'b1)
-                                                begin
-                                                    bit_counter <= BIT_CHANGER_MAX_VALUE;
-                                                    canal_counter <= 2'b00;
-                                                    reg_out_ready <= 1'b1;
-                                                end
-                                            else
-                                                begin
-                                                    bit_counter <= BIT_CHANGER_MAX_VALUE;
-                                                    canal_counter <= 2'b00;
-                                                    reg_out_ready <= 1'b1;
-                                                    state <= IDLE;
-                                                end
-                                        end
+                                    reg_out_PBDAT <= 1'b0;
+                                    bit_counter <= bit_counter + 1;
+                                end
+                                
+                            if (canal_counter == 1 && bit_counter == 31)
+                                begin
+                                    if (in_en == 1)
+                                        reg_sample <= sample;
                                     else
-                                        begin
-                                            bit_counter <= 0;
-                                            reg_out_PBDAT <= 1'b0;
-                                            reg_out_PBLRC = ~reg_out_PBLRC;
-                                        end
+                                        state <= IDLE;
                                 end
                         end
             endcase
         end
-//    always @(posedge in_BCLK)
-//        begin
-//            case(state)
-//                IDLE:
-//                    begin
-//                        if(in_en == 1'b1)
-//                            begin
-//                                reg_out_MUTE = 1'b1;
-//                                reg_out_ready = 1'b0;
-//                                canal_counter <= 2'b00;
-//                                state <= SEND;
-//                            end
-//                    end
-//                SEND:
-//                    begin
-//                        if(canal_counter == 2'b10)
-//                            begin
-//                                reg_out_ready <= 1'b1;
-//                                if (in_en == 1'b1)
-//                                    begin
-//                                        canal_counter <= 1'b00;
-//                                        state <= SEND;
-//                                    end
-//                                else
-//                                    state <= IDLE;
-//                            end
-//                        else
-//                            begin
-//                                case(bit_counter)
-//                                    5'b10000:
-//                                        begin
-//                                            reg_out_PBLRC = ~reg_out_PBLRC;
-//                                            reg_out_PBDAT <= 16'd0;
-//                                            canal_counter <= canal_counter + 1'b1;
-//                                        end
-//                                    5'b00000:
-//                                        begin
-//                                            reg_out_PBDAT <= sample[15];
-//                                            bit_counter <= 5'b00001;
-//                                        end
-//                                    5'b00001:
-//                                        begin
-//                                            reg_out_PBDAT = sample[14];
-//                                            bit_counter <= 5'b00010;
-//                                        end
-//                                    5'b00010:
-//                                        begin
-//                                            reg_out_PBDAT <= sample[13];
-//                                            bit_counter <= 5'b00011;
-//                                        end
-//                                    5'b00011:
-//                                        begin
-//                                            reg_out_PBDAT <= sample[12];
-//                                            bit_counter <= 5'b00010;
-//                                        end
-//                                    5'b00011:
-//                                        begin
-//                                            reg_out_PBDAT <= sample[12];
-//                                            bit_counter <= 5'b00010;
-//                                        end
-//                                    5'b00100:
-//                                        begin
-//                                            reg_out_PBDAT <= sample[11];
-//                                            bit_counter <= 5'b00101;
-//                                        end
-//                                    5'b00101:
-//                                        begin
-//                                            reg_out_PBDAT <= sample[10];
-//                                            bit_counter <= 5'b00110;
-//                                        end
-//                                    5'b00110:
-//                                        begin
-//                                            reg_out_PBDAT <= sample[9];
-//                                            bit_counter <= 5'b00111;
-//                                        end
-//                                    5'b00111:
-//                                        begin
-//                                            reg_out_PBDAT <= sample[8];
-//                                            bit_counter <= 5'b01000;
-//                                        end
-//                                    5'b01000:
-//                                        begin
-//                                            reg_out_PBDAT <= sample[7];
-//                                            bit_counter <= 5'b01001;
-//                                        end
-//                                    5'b01001:
-//                                        begin
-//                                            reg_out_PBDAT <= sample[6];
-//                                            bit_counter <= 5'b01010;
-//                                        end
-//                                    5'b01010:
-//                                        begin
-//                                            reg_out_PBDAT <= sample[5];
-//                                            bit_counter <= 5'b01011;
-//                                        end
-//                                    5'b01011:
-//                                        begin
-//                                            reg_out_PBDAT <= sample[5];
-//                                            bit_counter <= 5'b01100;
-//                                        end
-//                                    5'b01100:
-//                                        begin
-//                                            reg_out_PBDAT <= sample[3];
-//                                            bit_counter <= 5'b01101;
-//                                        end
-//                                    5'b01101:
-//                                        begin
-//                                            reg_out_PBDAT <= sample[2];
-//                                            bit_counter <= 5'b01110;
-//                                        end
-//                                    5'b01110:
-//                                        begin
-//                                            reg_out_PBDAT <= sample[1];
-//                                            bit_counter <= 5'b01111;
-//                                        end
-//                                    5'b01111:
-//                                        begin
-//                                            reg_out_PBDAT <= sample[0];
-//                                            bit_counter <= 5'b10000;
-//                                        end
-//                                endcase
-//                            end
-//                    end
-//            endcase
-//        end
-        
+    
+
     assign out_ready = reg_out_ready;
-    assign out_BLCK = in_BCLK;
+    assign out_BLCK = reg_out_BCLK;
     assign out_PBDAT = reg_out_PBDAT;
     assign out_PBLRC = reg_out_PBLRC;
     assign out_RECDAT = reg_out_RECDAT;
@@ -248,7 +174,7 @@ module i2s #(parameter BPS=24)(
     assign out_SDIN = reg_out_SDIN;
     assign out_SCLK = reg_out_SCLK;
     assign out_MUTE = reg_out_MUTE;
-    assign out_MCLK = in_clk;
+    assign out_MCLK = reg_out_MCLK;
     
     
 endmodule

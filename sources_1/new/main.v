@@ -25,9 +25,9 @@
 // (10000000)/(115200) = 87
 
 //CLOCK 125MHz
-module main #(parameter BPS=24, parameter MESSAGE_SIZE=1, parameter CLKS_PER_BIT=107 ) ( //1085 for 125MHz, 106.7 for 12.188MHz
+module main #(parameter BPS=24, parameter MESSAGE_SIZE=1, parameter CLKS_PER_BIT=640 ) ( //1085 for 125MHz, 106.7 for 12.188MHz , 640 for 73.728MHz
     //clock
-    input in_clk,
+    input in_clk, //125MHZ
     // rx serial input
     input rx_serial,
    // message to code
@@ -54,9 +54,16 @@ module main #(parameter BPS=24, parameter MESSAGE_SIZE=1, parameter CLKS_PER_BIT
     
     wire internal_clk;
     
+//     BUFG BUFG_inst (
+//      .O(internal_clk), // 1-bit output: Clock output
+//      .I(in_clk)  // 1-bit input: Clock input
+//   );
+
+
+    
     clk_wiz_0 cw0(
         .clk_in1(in_clk),
-        .clk_out1(internal_clk));
+        .clk_out1(internal_clk)); //61.44MHz
     
     
     wire uart_rx_frame_done;
@@ -92,6 +99,7 @@ module main #(parameter BPS=24, parameter MESSAGE_SIZE=1, parameter CLKS_PER_BIT
     wire[BPS-1:0] fifo_buffer_out;
     wire fifo_buffer_read_en; 
     wire fifo_empty; 
+    wire fifo_prog_empty;
      
     fifo_buffer fb(
         .clk(internal_clk),
@@ -101,10 +109,10 @@ module main #(parameter BPS=24, parameter MESSAGE_SIZE=1, parameter CLKS_PER_BIT
         .full(),
         .dout(fifo_buffer_out),
         .rd_en(fifo_buffer_read_en),
-        .empty(fifo_empty),
+        .empty(fifo_empty), //here put fifo_empty
         .prog_full(),
         .overflow(),
-        .prog_empty(),
+        .prog_empty(fifo_prog_empty),
         .underflow()
       );
     
@@ -124,6 +132,7 @@ module main #(parameter BPS=24, parameter MESSAGE_SIZE=1, parameter CLKS_PER_BIT
         .in_sample2uart_ready(sample2uart_ready),
         .in_i2s_ready(in_i2s_ready),
         .in_fifo_empty(fifo_empty),
+        //.in_fifo_prog_empty(fifo_prog_empty),
         .out_uart_sample(w_out_uart_sample),
         .out_i2s441kH_sample(out_i2s441kH_sample),
         .out_i2s2H_sample(out_i2s2H_sample),
@@ -134,7 +143,6 @@ module main #(parameter BPS=24, parameter MESSAGE_SIZE=1, parameter CLKS_PER_BIT
         
     i2s i2s_instance(
         .in_clk(internal_clk),
-        .in_BCLK(internal_clk),
         .sample(out_i2s441kH_sample),
         .in_en(w_i2s441kH_en),
         .out_ready(in_i2s_ready),
@@ -150,8 +158,8 @@ module main #(parameter BPS=24, parameter MESSAGE_SIZE=1, parameter CLKS_PER_BIT
         );
          
         
-         wire uart_tx_active;
-         wire [7:0] s2u_sample_split;
+     wire uart_tx_active;
+     wire [7:0] s2u_sample_split;
      wire s2u_ready;
      
      sample2uart s2u(

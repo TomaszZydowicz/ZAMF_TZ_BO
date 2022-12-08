@@ -1,10 +1,10 @@
 // Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-// Date        : Mon Dec  5 22:24:11 2022
+// Date        : Thu Dec  8 22:29:00 2022
 // Host        : Dell running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode synth_stub
-//               d:/Foldery/Studia/MGR/SEM2/ZAMPF/projekt/TZ_BO_PRO/TZ_BO_PRO.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0_stub.v
+//               D:/Foldery/Studia/MGR/SEM2/ZAMPF/projekt/TZ_BO_PRO/TZ_BO_PRO.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0_stub.v
 // Design      : clk_wiz_0
 // Purpose     : Stub declaration of top-level module interface
 // Device      : xc7z010clg400-1

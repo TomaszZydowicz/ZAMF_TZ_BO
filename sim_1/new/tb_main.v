@@ -25,8 +25,8 @@ module tb_main();
     localparam MESSAGE_SIZE = 1;
     localparam BPS = 24;
     localparam T = 8;//8; //100 for 10MHz, 8 for 125Mhz, 
-    localparam T_internal = 81.38;
-    localparam CLKS_PER_BIT    = 107;
+    localparam T_internal = 13.56; //for 73.728MHz
+    localparam CLKS_PER_BIT    = 640; //for 73.728MHz
     
     reg CLK = 0;
     reg[MESSAGE_SIZE-1:0] IN_MESSAGE = 0;
@@ -99,12 +99,27 @@ module tb_main();
             UART_WRITE_BYTE(8'h3F);
             UART_WRITE_BYTE(8'h03);
             UART_WRITE_BYTE(8'h33);
+            UART_WRITE_BYTE(8'h3F);
+            UART_WRITE_BYTE(8'h03);
+            UART_WRITE_BYTE(8'h33);
+            UART_WRITE_BYTE(8'h3F);
+            UART_WRITE_BYTE(8'h03);
+            UART_WRITE_BYTE(8'h33);
+            UART_WRITE_BYTE(8'h3F);
+            UART_WRITE_BYTE(8'h03);
+            UART_WRITE_BYTE(8'h33);
+            UART_WRITE_BYTE(8'h3F);
+            UART_WRITE_BYTE(8'h03);
+            UART_WRITE_BYTE(8'h33);
+            UART_WRITE_BYTE(8'h3F);
+            UART_WRITE_BYTE(8'h03);
+            UART_WRITE_BYTE(8'h33);
             #(T)
 //            create_new_message(IN_MESSAGE);
 //            UART_WRITE_BYTE(8'h01);
 //            #(T)
 //            UART_WRITE_BYTE(8'hF0);
-            #(10000*T)
+            #(1000000*T)
        
           
 

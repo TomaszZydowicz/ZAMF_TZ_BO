@@ -33,6 +33,8 @@ module sample_switch  #(parameter BPS=24) (
     input in_i2s_ready,
     //information if fifo has sth to give
     input in_fifo_empty,
+    // fifo ready for start of sending data
+    //input in_fifo_prog_empty,
     //out sample for uart
     output [BPS-1:0] out_uart_sample,
     //out sample for 44.1kHZ
@@ -103,7 +105,7 @@ module sample_switch  #(parameter BPS=24) (
                             begin
                                 mode <= I2S_441kHZ;
                                 state <= I2S_441kHz_IDLE;
-                            end
+                        end
                         else
                             mode <= IDLE; //error
                     end
