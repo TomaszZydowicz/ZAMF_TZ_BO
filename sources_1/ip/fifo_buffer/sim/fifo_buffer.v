@@ -64,6 +64,7 @@ module fifo_buffer (
   overflow,
   empty,
   underflow,
+  data_count,
   prog_full,
   prog_empty
 );
@@ -86,6 +87,7 @@ output wire overflow;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ EMPTY" *)
 output wire empty;
 output wire underflow;
+output wire [9 : 0] data_count;
 output wire prog_full;
 output wire prog_empty;
 
@@ -104,7 +106,7 @@ output wire prog_empty;
     .C_HAS_ALMOST_EMPTY(0),
     .C_HAS_ALMOST_FULL(0),
     .C_HAS_BACKUP(0),
-    .C_HAS_DATA_COUNT(0),
+    .C_HAS_DATA_COUNT(1),
     .C_HAS_INT_CLK(0),
     .C_HAS_MEMINIT_FILE(0),
     .C_HAS_OVERFLOW(1),
@@ -324,7 +326,7 @@ output wire prog_empty;
     .almost_empty(),
     .valid(),
     .underflow(underflow),
-    .data_count(),
+    .data_count(data_count),
     .rd_data_count(),
     .wr_data_count(),
     .prog_full(prog_full),

@@ -34,7 +34,7 @@ module sample_switch  #(parameter BPS=24) (
     //information if fifo has sth to give
     input in_fifo_empty,
     // fifo ready for start of sending data
-    //input in_fifo_prog_empty,
+    input in_fifo_prog_empty,
     //out sample for uart
     output [BPS-1:0] out_uart_sample,
     //out sample for 44.1kHZ
@@ -61,9 +61,14 @@ module sample_switch  #(parameter BPS=24) (
     parameter UART_LOAD_SAMPLE_FROM_FIFO = 4'd2;
     parameter UART_SEND_SAMPLE_TO_S2U = 4'd3;
     
-    parameter I2S_441kHz_IDLE = 4'd4;
+    parameter I2S_441kHz_FIRST = 4'd4;
     parameter I2S__441kHz_LOAD_SAMPLE_FROM_FIFO = 4'd5;
     parameter I2S__441kHz_SEND_SAMPLE_TO_I2S = 4'd6;
+    parameter I2S__441kHz_WAIT_ONE_CYCLE_AFTER_FIRST = 4'd11;
+    parameter I2S__441kHz_PEPARE_NEXT_SAMPLE_STEP_1 = 4'd7;
+    parameter  I2S__441kHz_PEPARE_NEXT_SAMPLE_STEP_2 = 4'd8;
+    parameter  I2S__441kHz_PEPARE_NEXT_SAMPLE_STEP_3 = 4'd9;
+    parameter  I2S__441kHz_WAIT_FOR_I2S_TO_BE_READY = 4'd10;
     
     
     reg [3:0] state = 4'd0;
@@ -75,6 +80,7 @@ module sample_switch  #(parameter BPS=24) (
     reg reg_sample2uart_en = 0;
     reg reg_i2s2H_en = 0;
     reg reg_i2s441kH_en = 0;
+    
     
     always @(posedge in_clk)
         begin
@@ -103,9 +109,12 @@ module sample_switch  #(parameter BPS=24) (
                             end
                         else if (in_mode == I2S_441kHZ)
                             begin
-                                mode <= I2S_441kHZ;
-                                state <= I2S_441kHz_IDLE;
-                        end
+                                if(in_fifo_prog_empty == 0)
+                                    begin
+                                        mode <= I2S_441kHZ;
+                                        state <= I2S_441kHz_FIRST;
+                                    end
+                            end
                         else
                             mode <= IDLE; //error
                     end
@@ -160,7 +169,7 @@ module sample_switch  #(parameter BPS=24) (
                 I2S_441kHZ:
                     begin //can i put value only to wires i want to change?
                         case(state)
-                            I2S_441kHz_IDLE:
+                            I2S_441kHz_FIRST:
                                 if (in_i2s_ready == 1'b1 && in_fifo_empty == 1'b0)
                                     begin
                                         reg_fifo_en <= 1'b1;
@@ -170,6 +179,7 @@ module sample_switch  #(parameter BPS=24) (
                                     begin
                                         reg_fifo_en <= 1'b0;
                                         reg_i2s441kH_en <= 1'b0;
+                                        //reg_i2s441kH_en <= 1'b0;
                                     end   
                              I2S__441kHz_LOAD_SAMPLE_FROM_FIFO:
                                 begin
@@ -181,10 +191,36 @@ module sample_switch  #(parameter BPS=24) (
                                 begin
                                     reg_out_i2s441kH_sample <= in_sample;
                                     reg_i2s441kH_en <= 1'b1;
-                                    state <= I2S_441kHz_IDLE;
+                                    state <= I2S__441kHz_WAIT_ONE_CYCLE_AFTER_FIRST;
                                 end
-                                
-                            
+                            I2S__441kHz_WAIT_ONE_CYCLE_AFTER_FIRST:
+                                state<=I2S__441kHz_WAIT_FOR_I2S_TO_BE_READY;
+                            I2S__441kHz_PEPARE_NEXT_SAMPLE_STEP_1:
+                                begin
+                                    if (in_fifo_empty == 0)
+                                        begin
+                                            reg_fifo_en <= 1'b1;
+                                            state <= I2S__441kHz_PEPARE_NEXT_SAMPLE_STEP_2;
+                                        end
+                                    else
+                                        state <= I2S_441kHz_FIRST;
+                                end
+                            I2S__441kHz_PEPARE_NEXT_SAMPLE_STEP_2:
+                                begin
+                                    // reg_out_uart_sample <= in_sample; //module needs time to load fifo sample
+                                    reg_fifo_en <= 1'b0;
+                                    state <= I2S__441kHz_PEPARE_NEXT_SAMPLE_STEP_3;
+                                end
+                            I2S__441kHz_PEPARE_NEXT_SAMPLE_STEP_3:
+                                begin
+                                    reg_out_i2s441kH_sample <= in_sample;
+                                    state <= I2S__441kHz_WAIT_FOR_I2S_TO_BE_READY;
+                                end
+                            I2S__441kHz_WAIT_FOR_I2S_TO_BE_READY:
+                                if (in_i2s_ready == 1'b1)
+                                    state <= I2S__441kHz_PEPARE_NEXT_SAMPLE_STEP_1;
+                                else
+                                    state <= I2S__441kHz_WAIT_FOR_I2S_TO_BE_READY;
                         endcase
                        
                         //---------------------------------------

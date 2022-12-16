@@ -65,6 +65,7 @@ fifo_buffer your_instance_name (
   .overflow(overflow),      // output wire overflow
   .empty(empty),            // output wire empty
   .underflow(underflow),    // output wire underflow
+  .data_count(data_count),  // output wire [9 : 0] data_count
   .prog_full(prog_full),    // output wire prog_full
   .prog_empty(prog_empty)  // output wire prog_empty
 );

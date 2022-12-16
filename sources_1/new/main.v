@@ -110,6 +110,7 @@ module main #(parameter BPS=24, parameter MESSAGE_SIZE=1, parameter CLKS_PER_BIT
         .dout(fifo_buffer_out),
         .rd_en(fifo_buffer_read_en),
         .empty(fifo_empty), //here put fifo_empty
+        .data_count(),
         .prog_full(),
         .overflow(),
         .prog_empty(fifo_prog_empty),
@@ -132,7 +133,7 @@ module main #(parameter BPS=24, parameter MESSAGE_SIZE=1, parameter CLKS_PER_BIT
         .in_sample2uart_ready(sample2uart_ready),
         .in_i2s_ready(in_i2s_ready),
         .in_fifo_empty(fifo_empty),
-        //.in_fifo_prog_empty(fifo_prog_empty),
+        .in_fifo_prog_empty(fifo_prog_empty),
         .out_uart_sample(w_out_uart_sample),
         .out_i2s441kH_sample(out_i2s441kH_sample),
         .out_i2s2H_sample(out_i2s2H_sample),

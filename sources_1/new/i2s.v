@@ -40,6 +40,12 @@ module i2s #(parameter BPS=24)(
     parameter IDLE = 1'b0;
     parameter SEND = 1'b1;
     
+    parameter [3:0] q_ASK_FOR_SAMPLE = 4'd1;
+    parameter [3:0] q_STOP_ASKING_FOR_SAMPLE = 4'd2;
+    parameter [3:0] q_LOAD_SAMPLE = 4'd3;
+    parameter [3:0] q_WAIT_FOR_BCLK = 4'd4;
+    reg [1:0] quick_state_counter = 2'b0;
+    
     reg reg_out_ready = 1'b1;
     reg reg_out_BCLK = 1'b1;
     reg reg_out_PBDAT =1'b0;
@@ -53,6 +59,7 @@ module i2s #(parameter BPS=24)(
     
     //reg [5:0] bit_counter = 5'b10000;
     reg state = IDLE;
+    reg [3:0]  quick_state = q_ASK_FOR_SAMPLE;
     
     reg [BPS-1:0] bit_counter = 0;
     reg [BPS-1:0] reg_sample = 0;
@@ -132,7 +139,6 @@ module i2s #(parameter BPS=24)(
                             begin
                                 reg_out_MUTE <= 1'b0;
                                 reg_out_ready <= 1'b1;
-                                reg_out_ready <= 1'b1;
                                 reg_out_BCLK <= 1'b1;
                                 reg_out_PBDAT <= 1'b0;
                                 reg_out_PBLRC <= 1'b1;
@@ -140,27 +146,60 @@ module i2s #(parameter BPS=24)(
                             end
                     end
                 SEND:
-                    if(BCLK_negedge)
-                        begin
-                            if (bit_counter < 24)
+                    begin
+                        case(quick_state)
+                            q_ASK_FOR_SAMPLE:
+                                if (canal_counter == 1 && bit_counter == 31) //ask for sample
+                                            begin
+                                                if (in_en == 1)
+                                                    begin
+                                                        reg_out_ready <= 1'b1;
+                                                        quick_state <= q_STOP_ASKING_FOR_SAMPLE;
+                                                    end
+                                                else
+                                                    state <= IDLE;
+                                            end
+                            q_STOP_ASKING_FOR_SAMPLE:
                                 begin
-                                    reg_out_PBDAT <= reg_sample[(BPS-1) - bit_counter];
-                                    bit_counter <= bit_counter + 1;
-                                end
-                            else
-                                begin
-                                    reg_out_PBDAT <= 1'b0;
-                                    bit_counter <= bit_counter + 1;
-                                end
-                                
-                            if (canal_counter == 1 && bit_counter == 31)
-                                begin
-                                    if (in_en == 1)
-                                        reg_sample <= sample;
+                                    reg_out_ready <= 1'b0;
+                                    if (quick_state_counter == 3)
+                                        begin
+                                            quick_state_counter = 0;
+                                            quick_state <= q_LOAD_SAMPLE;
+                                        end
                                     else
-                                        state <= IDLE;
+                                        begin
+                                            quick_state_counter = quick_state_counter +1;
+                                            quick_state <= q_STOP_ASKING_FOR_SAMPLE;
+                                        end
                                 end
-                        end
+                            q_LOAD_SAMPLE:
+                                begin
+                                    reg_sample <= sample;
+                                    quick_state <= q_WAIT_FOR_BCLK;
+                                end
+                            q_WAIT_FOR_BCLK:
+                                 if ( bit_counter == 0)
+                                     quick_state <= q_ASK_FOR_SAMPLE;   
+                                 else
+                                      quick_state <= q_WAIT_FOR_BCLK;   
+                        
+                        endcase
+                    
+                        if(BCLK_negedge)
+                            begin
+                                if (bit_counter < 24)
+                                    begin
+                                        reg_out_PBDAT <= reg_sample[(BPS-1) - bit_counter];
+                                        bit_counter <= bit_counter + 1;
+                                    end
+                                else
+                                    begin
+                                        reg_out_PBDAT <= 1'b0;
+                                        bit_counter <= bit_counter + 1;
+                                    end
+                            end
+                    end
             endcase
         end
     
