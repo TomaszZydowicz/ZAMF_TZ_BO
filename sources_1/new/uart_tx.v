@@ -1,10 +1,11 @@
+`timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: 
 // 
-// Create Date: 29.10.2022 18:25:37
+// Create Date: 02.12.2022 21:37:42
 // Design Name: 
-// Module Name: uart_tx
+// Module Name: sample2uart
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -18,16 +19,6 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
-//////////////////////////////////////////////////////////////////////
-// File Downloaded from http://www.nandland.com
-//////////////////////////////////////////////////////////////////////
-// This file contains the UART Transmitter.  This transmitter is able
-// to transmit 8 bits of serial data, one start bit, one stop bit,
-// and no parity bit.  When transmit is complete o_Tx_done will be
-// driven high for one clock cycle.
-//
-// Set Parameter CLKS_PER_BIT as follows:
 // CLKS_PER_BIT = (Frequency of i_Clock)/(Frequency of UART)
 // Example: 10 MHz Clock, 115200 baud UART
 // (10000000)/(115200) = 87
@@ -35,133 +26,140 @@
 module uart_tx 
   #(parameter CLKS_PER_BIT=87)
   (
-   input       i_Clock,
-   input       i_Tx_DV,
-   input [7:0] i_Tx_Byte, 
-   output      o_Tx_Active,
-   output reg  o_Tx_Serial,
-   output      o_Tx_Done
+   input                in_Clock,
+   input                in_Tx_DV,
+   input        [7:0]   in_Tx_Byte, 
+   output               out_Tx_Active,
+   output reg           out_Tx_Serial,
+   output               out_Tx_Done
    );
   
-  parameter s_IDLE         = 3'b000;
-  parameter s_TX_START_BIT = 3'b001;
-  parameter s_TX_DATA_BITS = 3'b010;
-  parameter s_TX_STOP_BIT  = 3'b011;
-  parameter s_CLEANUP      = 3'b100;
+
+  reg [2:0]     state           = 0;
+  reg [10:0]    Clock_Count_reg = 0;
+  reg [2:0]     Bit_Index_reg   = 0;
+  reg [7:0]     Tx_Data_reg     = 0;
+  reg           Tx_Done_reg     = 0;
+  reg           Tx_Active_reg     = 0;
    
-  reg [2:0]    r_SM_Main     = 0;
-  reg [10:0]    r_Clock_Count = 0;
-  reg [2:0]    r_Bit_Index   = 0;
-  reg [7:0]    r_Tx_Data     = 0;
-  reg          r_Tx_Done     = 0;
-  reg          r_Tx_Active   = 0;
+  localparam    IDLE            = 3'b000;
+  localparam    TX_START_BIT    = 3'b001;
+  localparam    TX_DATA_BITS    = 3'b010;
+  localparam    TX_STOP_BIT     = 3'b011;
+  localparam    CLEANUP         = 3'b100;
      
-  always @(posedge i_Clock)
-    begin
-       
-      case (r_SM_Main)
-        s_IDLE :
+  always @(posedge in_Clock)
+    begin      
+      case (state)
+                                                      
+//////////////////////////////////////////////////////////////////////////////////
+            
+        IDLE :
           begin
-            o_Tx_Serial   <= 1'b1;         // Drive Line High for Idle
-            r_Tx_Done     <= 1'b0;
-            r_Clock_Count <= 0;
-            r_Bit_Index   <= 0;
+            out_Tx_Serial   <= 1'b1;         // Drive Line High for Idle
+            Tx_Done_reg     <= 1'b0;
+            Clock_Count_reg <= 0;
+            Bit_Index_reg   <= 0;
              
-            if (i_Tx_DV == 1'b1)
+            if (in_Tx_DV == 1'b1)
               begin
-                r_Tx_Active <= 1'b1;
-                r_Tx_Data   <= i_Tx_Byte;
-                r_SM_Main   <= s_TX_START_BIT;
+                Tx_Active_reg                   <= 1'b1;
+                Tx_Data_reg                     <= in_Tx_Byte;
+                state                           <= TX_START_BIT;
               end
             else
-              r_SM_Main <= s_IDLE;
-          end // case: s_IDLE
-         
-         
+              state <= IDLE;
+          end
+                                                
+//////////////////////////////////////////////////////////////////////////////////
+                 
         // Send out Start Bit. Start bit = 0
-        s_TX_START_BIT :
+        TX_START_BIT :
           begin
-            o_Tx_Serial <= 1'b0;
+            out_Tx_Serial <= 1'b0;
              
             // Wait CLKS_PER_BIT-1 clock cycles for start bit to finish
-            if (r_Clock_Count < CLKS_PER_BIT-1)
+            if (Clock_Count_reg < CLKS_PER_BIT-1)
               begin
-                r_Clock_Count <= r_Clock_Count + 1;
-                r_SM_Main     <= s_TX_START_BIT;
+                Clock_Count_reg                 <= Clock_Count_reg + 1;
+                state                           <= TX_START_BIT;
               end
             else
               begin
-                r_Clock_Count <= 0;
-                r_SM_Main     <= s_TX_DATA_BITS;
+                Clock_Count_reg                 <= 0;
+                state                           <= TX_DATA_BITS;
               end
-          end // case: s_TX_START_BIT
-         
-         
+          end
+                                                
+//////////////////////////////////////////////////////////////////////////////////
+                    
         // Wait CLKS_PER_BIT-1 clock cycles for data bits to finish         
-        s_TX_DATA_BITS :
+        TX_DATA_BITS :
           begin
-            o_Tx_Serial <= r_Tx_Data[r_Bit_Index];
+            out_Tx_Serial                       <= Tx_Data_reg[Bit_Index_reg];
              
-            if (r_Clock_Count < CLKS_PER_BIT-1)
+            if (Clock_Count_reg < CLKS_PER_BIT-1)
               begin
-                r_Clock_Count <= r_Clock_Count + 1;
-                r_SM_Main     <= s_TX_DATA_BITS;
+                Clock_Count_reg                 <= Clock_Count_reg + 1;
+                state                           <= TX_DATA_BITS;
               end
             else
               begin
-                r_Clock_Count <= 0;
+                Clock_Count_reg                 <= 0;
                  
                 // Check if we have sent out all bits
-                if (r_Bit_Index < 7)
+                if (Bit_Index_reg < 7)
                   begin
-                    r_Bit_Index <= r_Bit_Index + 1;
-                    r_SM_Main   <= s_TX_DATA_BITS;
+                    Bit_Index_reg               <= Bit_Index_reg + 1;
+                    state                       <= TX_DATA_BITS;
                   end
                 else
                   begin
-                    r_Bit_Index <= 0;
-                    r_SM_Main   <= s_TX_STOP_BIT;
+                    Bit_Index_reg               <= 0;
+                    state                       <= TX_STOP_BIT;
                   end
               end
-          end // case: s_TX_DATA_BITS
-         
-         
+          end
+                                                
+//////////////////////////////////////////////////////////////////////////////////
+                     
         // Send out Stop bit.  Stop bit = 1
-        s_TX_STOP_BIT :
+        TX_STOP_BIT :
           begin
-            o_Tx_Serial <= 1'b1;
+            out_Tx_Serial                       <= 1'b1;
              
             // Wait CLKS_PER_BIT-1 clock cycles for Stop bit to finish
-            if (r_Clock_Count < CLKS_PER_BIT-1)
+            if (Clock_Count_reg < CLKS_PER_BIT-1)
               begin
-                r_Clock_Count <= r_Clock_Count + 1;
-                r_SM_Main     <= s_TX_STOP_BIT;
+                Clock_Count_reg                 <= Clock_Count_reg + 1;
+                state                           <= TX_STOP_BIT;
               end
             else
               begin
-                r_Tx_Done     <= 1'b1;
-                r_Clock_Count <= 0;
-                r_SM_Main     <= s_CLEANUP;
-                r_Tx_Active   <= 1'b0;
+                Tx_Done_reg                     <= 1'b1;
+                Clock_Count_reg                 <= 0;
+                state                           <= CLEANUP;
+                Tx_Active_reg                   <= 1'b0;
               end
-          end // case: s_Tx_STOP_BIT
-         
-         
-        // Stay here 1 clock
-        s_CLEANUP :
+          end
+                                                
+//////////////////////////////////////////////////////////////////////////////////
+                   
+        // 1 cycle delay
+        CLEANUP :
           begin
-            r_Tx_Done <= 1'b1;
-            r_SM_Main <= s_IDLE;
+            Tx_Done_reg                         <= 1'b1;
+            state                               <= IDLE;
           end
          
          
         default :
-          r_SM_Main <= s_IDLE;
+          state <= IDLE;
          
       endcase
     end
  
-  assign o_Tx_Active = r_Tx_Active;
-  assign o_Tx_Done   = r_Tx_Done;
+  assign out_Tx_Active                          = Tx_Active_reg;
+  assign out_Tx_Done                            = Tx_Done_reg;
    
 endmodule

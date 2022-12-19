@@ -19,52 +19,50 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-module bit_changer_seq #(parameter BPS=24)
-//BPS - bits per sample
-                    (
-                        //clock
-                        input in_clk,
-                        //enable signal active high
-                        input in_enable,
-                        //frame of samples, in each sample BPS bits defined as vector
-                        input [BPS-1:0] in_frame,
-                        //part of message 
-                        input in_message,
-                        //frame with changed LSB
-                        output [BPS-1:0] out_frame, //reg or wire? - wire dangerous if frame is big 
-                        //ready signal
-                        output out_ready
-                     );
+module bit_changer_seq #(parameter BPS=24) //BPS - bits per sample
+    (     
+    input                       in_clk,//clock   
+    input                       in_enable,//enable signal active high
+    input   [BPS-1:0]           in_frame,//frame of samples, in each sample BPS bits defined as vector
+    input                       in_message,//part of message 
+    output  [BPS-1:0]           out_frame,    //frame with changed LSB. Reg or wire? - wire dangerous if frame is big 
+    output                      out_ready    //ready signal
+     );
     
-    localparam s_IDLE = 2'b00;
-    localparam s_CODE = 2'b01;
-    localparam s_STOP = 2'b10;
+    localparam                  IDLE = 2'b00;
+    localparam                  CODE = 2'b01;
+    localparam                  STOP = 2'b10;
     
-    reg [1:0] state = s_IDLE;
-    integer i = 0;
+    reg     [1:0]               state = IDLE;
+    integer                     i = 0;
     
     
-    reg r_in_message;
-    reg [BPS-1:0] r_in_frame = {BPS{1'b0}};
-    reg [BPS-1:0] r_out_frame = {BPS{1'b0}};
-    reg r_out_ready = 0;
+    reg                         r_in_message;
+    reg     [BPS-1:0]           r_in_frame = {BPS{1'b0}};
+    reg     [BPS-1:0]           r_out_frame = {BPS{1'b0}};
+    reg                         r_out_ready = 0;
     
     always @(posedge in_clk)
         begin
             case (state)
-                s_IDLE:
+            
+ //////////////////////////////////////////////////////////////////////////////////
+ 
+                IDLE:
                     begin
                         if (in_enable == 1'b1)
                             begin
-                                r_in_frame <= in_frame;
-                                state <= s_CODE;
+                                r_in_frame              <= in_frame;
+                                state                   <= CODE;
                             end
                         else
                             //r_out_frame <= {FRAME_SIZE*BPS{1'b0}};  //czy zerowwaæ tu wartoœæ? czy trzymaæ wartoœæ d³u¿ej?
-                            r_out_ready <= 1'b0;
+                            r_out_ready                 <= 1'b0;
                     end
-                
-                s_CODE:
+             
+ //////////////////////////////////////////////////////////////////////////////////
+    
+                CODE:
                     begin
 //                        for (i=0 ; i < BPS ; i=i+1)
 //                            begin //: CHANGE_LSB
@@ -73,20 +71,23 @@ module bit_changer_seq #(parameter BPS=24)
 //                                else
 //                                    r_out_frame[i] = in_frame[i];  
 //                            end
-                        r_out_frame <= {in_frame[BPS-1:1] ,  in_message};
-                        state <= s_STOP;
+                        r_out_frame                     <= {in_frame[BPS-1:1] ,  in_message};
+                        state                           <= STOP;
                      end
                     
-                s_STOP:
+                STOP:
                     begin
-                        r_out_ready <= 1'b1;
-                        state <= s_IDLE; //czy trzymaæ wartoœæ d³u¿ej?
+                        r_out_ready                     <= 1'b1;
+                        state                           <= IDLE; //czy trzymaæ wartoœæ d³u¿ej?
                     end
                     
              endcase
         end
-        
-    assign out_frame = r_out_frame;
-    assign out_ready = r_out_ready; 
+  
+ //////////////////////////////////////////////////////////////////////////////////
+       
+    assign out_frame                                    = r_out_frame;
+    assign out_ready                                    = r_out_ready; 
+    
 endmodule
 
