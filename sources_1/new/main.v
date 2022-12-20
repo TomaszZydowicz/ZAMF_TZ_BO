@@ -46,8 +46,8 @@ module main #(
     output              out_PBLRC,
     output              out_RECDAT,
     output              out_RELCRC,
-    output              out_SDIN,
-    output              out_SCLK,
+//    output              out_SDIN,
+//    output              out_SCLK,
     output              out_MUTE,
     output              out_MCLK
     );
@@ -172,8 +172,8 @@ module main #(
                         .out_PBLRC              (out_PBLRC),
                         .out_RECDAT             (out_RECDAT),
                         .out_RELCRC             (out_RELCRC),
-                        .out_SDIN               (out_SDIN),
-                        .out_SCLK               (out_SCLK),
+//                        .out_SDIN               (out_SDIN),
+//                        .out_SCLK               (out_SCLK),
                         .out_MUTE               (out_MUTE),
                         .out_MCLK               (out_MCLK)
      );

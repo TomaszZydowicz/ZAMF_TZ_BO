@@ -31,8 +31,8 @@ module i2s #(parameter BPS=24)(
     output              out_PBLRC, //64 BLCK clocks for one PBLRC clock (48kHz) if BCLK = 3.072 v 256 - if BLCK = 12.288
     output              out_RECDAT,
     output              out_RELCRC,
-    output              out_SDIN,
-    output              out_SCLK,
+//    output              out_SDIN,
+//    output              out_SCLK,
     output              out_MUTE,
     output              out_MCLK //12.288Mhz
     );
@@ -52,8 +52,8 @@ module i2s #(parameter BPS=24)(
     reg                     reg_out_PBLRC               = 1'b1; //left chanel first
     reg                     reg_out_RECDAT              = 1'b0;
     reg                     reg_out_RELCRC              = 1'b0;
-    reg                     reg_out_SDIN                = 1'b0;
-    reg                     reg_out_SCLK                = 1'b0;
+//    reg                     reg_out_SDIN                = 1'b0;
+//    reg                     reg_out_SCLK                = 1'b0;
     reg                     reg_out_MUTE                = 1'b0;
     reg                     reg_out_MCLK                = 1'b0;
     
@@ -224,8 +224,8 @@ module i2s #(parameter BPS=24)(
     assign out_PBLRC = reg_out_PBLRC;
     assign out_RECDAT = reg_out_RECDAT;
     assign out_RELCRC = reg_out_RELCRC;
-    assign out_SDIN = reg_out_SDIN;
-    assign out_SCLK = reg_out_SCLK;
+//    assign out_SDIN = reg_out_SDIN;
+//    assign out_SCLK = reg_out_SCLK;
     assign out_MUTE = reg_out_MUTE;
     assign out_MCLK = reg_out_MCLK;
      
