@@ -41,7 +41,7 @@ module tb_main();
     main #(.BPS(BPS), .MESSAGE_SIZE(MESSAGE_SIZE), .CLKS_PER_BIT(CLKS_PER_BIT)) m (
             .in_clk(CLK),
             .rx_serial(r_rx_serial),
-            .in_message(IN_MESSAGE),
+            //.in_message(IN_MESSAGE),
             .in_mode(mode),
             .in_reset(reset),
             .tx_serial(tx_serial),
@@ -75,18 +75,18 @@ module tb_main();
          end
     endtask // UART_WRITE_BYTE
     
-    task create_new_message;
-        output [MESSAGE_SIZE-1:0] IN_MESSAGE;
-        reg b;
-        integer i;
-        begin
-            for (i=0 ; i < MESSAGE_SIZE ; i=i+1)
-                begin
-                    b = $random()%2;
-                    IN_MESSAGE = {IN_MESSAGE, b};
-                end  
-        end
-    endtask
+//    task create_new_message;
+//        output [MESSAGE_SIZE-1:0] IN_MESSAGE;
+//        reg b;
+//        integer i;
+//        begin
+//            for (i=0 ; i < MESSAGE_SIZE ; i=i+1)
+//                begin
+//                    b = $random()%2;
+//                    IN_MESSAGE = {IN_MESSAGE, b};
+//                end  
+//        end
+//    endtask
 
 
 
@@ -94,7 +94,7 @@ module tb_main();
         begin
             CLK = 1'b0;
             mode = 2'b11;
-            create_new_message(IN_MESSAGE);
+            //create_new_message(IN_MESSAGE);
             #(1000*T)
             UART_WRITE_BYTE(8'h3F);
             UART_WRITE_BYTE(8'h03);

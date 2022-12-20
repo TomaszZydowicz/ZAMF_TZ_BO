@@ -35,7 +35,7 @@ module main #(
     (  
     input               in_clk,                     //clock 125MHZ
     input               rx_serial,                  // rx serial input
-    input               in_message,                 // message to code
+    //input               in_message,                 // message to code
     input   [1:0]       in_mode,                    // mode uart/i2s 2HZ/i2s 44.1kHZ
     input               in_reset,                   //reset
     output              tx_serial,                  // tx serial output
@@ -97,9 +97,12 @@ module main #(
     wire                bit_changer_ready;      
  
  //////////////////////////////////////////////////////////////////////////////////
+    
+    reg [87:0] in_message = 88'b0100101101101111011000110110100001100001011011010101101001000001010011010101000001000110;
        
     bit_changer_seq #(
-                        .BPS(BPS)) bcs (
+                        .BPS(BPS),
+                        .message_length(88)) bcs (
                         
                         .in_clk                 (internal_clk),
                         .in_enable              (u2s_ready),

@@ -46,9 +46,7 @@ module uart_rx
     localparam            RX_STOP_BIT     = 3'b011;
     localparam            CLEANUP         = 3'b100;
   
-    // Purpose: Double-register the incoming data.
-    // This allows it to be used in the UART RX Clock Domain.
-    // (It removes problems caused by metastability)
+
     always @(posedge in_Clock)
       begin
         Rx_Data_R_reg                         <= in_Rx_Serial;
