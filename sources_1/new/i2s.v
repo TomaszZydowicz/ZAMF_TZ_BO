@@ -28,7 +28,7 @@ module i2s #(parameter BPS=24)(
     output              out_ready,
     output              out_BLCK,
     output              out_PBDAT, //frame has 32 bits, 24bit of sample, 8 bits of X
-    output              out_PBLRC, //64 BLCK clocks for one PBLRC clock (48kHz) if BCLK = 3.072 v 256 - if BLCK = 12.288
+    output              out_PBLRC, //64 BLCK clocks for one PBLRC clock (24kHz) if BCLK = 1.536MHz 
     output              out_RECDAT,
     output              out_RELCRC,
 //    output              out_SDIN,
@@ -87,7 +87,7 @@ module i2s #(parameter BPS=24)(
         begin
             if (state == SEND)
                 begin
-                    if (BCLK_counter == 11) //24 clocks
+                    if (BCLK_counter == 23) //24 clocks
                         begin
                             if(reg_out_BCLK == 1)
                                 BCLK_negedge <= 1;
@@ -108,7 +108,7 @@ module i2s #(parameter BPS=24)(
         begin
             if (state == SEND)
             begin
-                if (PBLRC_counter == 767) // PBLRC 48kHz, in_clk 73.728Mhz //1536 clocks
+                if (PBLRC_counter == 1535) // PBLRC 24kHz, in_clk 73.728Mhz //3072 clocks
                     begin
                         PBLRC_counter               <= 0;
                         bit_counter                 <= 0; //start of a new chanel

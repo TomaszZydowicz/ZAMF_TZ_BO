@@ -9,7 +9,7 @@ int main()
 
     writeReg(15,0);
     usleep(1000);
-    writeReg(6, 16 + 32 + 64);
+    writeReg(6, 0b001110000);
     writeReg(2, 0b101111001);
     writeReg(3, 0b101111001);
     writeReg(4, 0);

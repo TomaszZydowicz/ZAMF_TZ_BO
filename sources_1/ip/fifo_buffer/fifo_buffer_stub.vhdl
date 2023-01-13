@@ -1,7 +1,7 @@
 -- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
--- Date        : Mon Dec  5 19:09:02 2022
+-- Date        : Mon Jan  9 10:45:24 2023
 -- Host        : Dell running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode synth_stub
 --               D:/Foldery/Studia/MGR/SEM2/ZAMPF/projekt/TZ_BO_PRO/TZ_BO_PRO.srcs/sources_1/ip/fifo_buffer/fifo_buffer_stub.vhdl
@@ -24,6 +24,7 @@ entity fifo_buffer is
     overflow : out STD_LOGIC;
     empty : out STD_LOGIC;
     underflow : out STD_LOGIC;
+    data_count : out STD_LOGIC_VECTOR ( 9 downto 0 );
     prog_full : out STD_LOGIC;
     prog_empty : out STD_LOGIC
   );
@@ -34,7 +35,7 @@ architecture stub of fifo_buffer is
 attribute syn_black_box : boolean;
 attribute black_box_pad_pin : string;
 attribute syn_black_box of stub : architecture is true;
-attribute black_box_pad_pin of stub : architecture is "clk,srst,din[23:0],wr_en,rd_en,dout[23:0],full,overflow,empty,underflow,prog_full,prog_empty";
+attribute black_box_pad_pin of stub : architecture is "clk,srst,din[23:0],wr_en,rd_en,dout[23:0],full,overflow,empty,underflow,data_count[9:0],prog_full,prog_empty";
 attribute x_core_info : string;
 attribute x_core_info of stub : architecture is "fifo_generator_v13_2_5,Vivado 2019.2";
 begin

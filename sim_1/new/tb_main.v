@@ -95,22 +95,28 @@ module tb_main();
             CLK = 1'b0;
             mode = 2'b11;
             //create_new_message(IN_MESSAGE);
-            #(1000*T)
+            #(10*T);
             UART_WRITE_BYTE(8'h3F);
             UART_WRITE_BYTE(8'h03);
             UART_WRITE_BYTE(8'h33); //
+            #(10000*T);
+            
             UART_WRITE_BYTE(8'hFF);
             UART_WRITE_BYTE(8'hE4);
             UART_WRITE_BYTE(8'hB7);
+            
             UART_WRITE_BYTE(8'hA9);
             UART_WRITE_BYTE(8'hB1);
             UART_WRITE_BYTE(8'hC5);
+            
             UART_WRITE_BYTE(8'hF1);
             UART_WRITE_BYTE(8'h1F);
             UART_WRITE_BYTE(8'hDD);
+            
             UART_WRITE_BYTE(8'hAA);
             UART_WRITE_BYTE(8'hBB);
             UART_WRITE_BYTE(8'hCC);
+            
             UART_WRITE_BYTE(8'h12);
             UART_WRITE_BYTE(8'h34);
             UART_WRITE_BYTE(8'h56);

@@ -24,7 +24,7 @@ module bit_changer_seq #(parameter BPS=24, parameter message_length = 88) //BPS 
     input                       in_clk,//clock   
     input                       in_enable,//enable signal active high
     input   [BPS-1:0]           in_frame,//frame of samples, in each sample BPS bits defined as vector
-    input   [message_length-1 : 0]                    in_message,//part of message 
+    input   [message_length-1 : 0]                    in_message,//message 
     output  [BPS-1:0]           out_frame,    //frame with changed LSB. Reg or wire? - wire dangerous if frame is big 
     output                      out_ready    //ready signal
      );
