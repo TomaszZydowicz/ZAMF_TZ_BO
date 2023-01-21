@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_main_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_main" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="1109000001fs"></ZoomEndTime>
+      <Cursor1Time time="96000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="266"></NameColumnWidth>
+      <ValueColumnWidth column_width="90"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="24" />
+   <wvobject fp_name="/tb_main/m/in_clk" type="logic">
+      <obj_property name="ElementShortName">in_clk</obj_property>
+      <obj_property name="ObjectShortName">in_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/cw0/clk_out1" type="logic">
+      <obj_property name="ElementShortName">clk_out1</obj_property>
+      <obj_property name="ObjectShortName">clk_out1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/uart_rx/in_Rx_Serial" type="logic">
+      <obj_property name="ElementShortName">in_Rx_Serial</obj_property>
+      <obj_property name="ObjectShortName">in_Rx_Serial</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/uart_rx/out_Rx_DV" type="logic">
+      <obj_property name="ElementShortName">out_Rx_DV</obj_property>
+      <obj_property name="ObjectShortName">out_Rx_DV</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/u2s/in_uart_frame" type="array">
+      <obj_property name="ElementShortName">in_uart_frame[7:0]</obj_property>
+      <obj_property name="ObjectShortName">in_uart_frame[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/u2s/out_frame" type="array">
+      <obj_property name="ElementShortName">out_frame[15:0]</obj_property>
+      <obj_property name="ObjectShortName">out_frame[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/uart_tx/out_Tx_Done" type="logic">
+      <obj_property name="ElementShortName">out_Tx_Done</obj_property>
+      <obj_property name="ObjectShortName">out_Tx_Done</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/uart_tx/out_Tx_Serial" type="logic">
+      <obj_property name="ElementShortName">out_Tx_Serial</obj_property>
+      <obj_property name="ObjectShortName">out_Tx_Serial</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/u2s/out_ready" type="logic">
+      <obj_property name="ElementShortName">out_ready</obj_property>
+      <obj_property name="ObjectShortName">out_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/fb/prog_empty" type="logic">
+      <obj_property name="ElementShortName">prog_empty</obj_property>
+      <obj_property name="ObjectShortName">prog_empty</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/bcs/out_frame" type="array">
+      <obj_property name="ElementShortName">out_frame[15:0]</obj_property>
+      <obj_property name="ObjectShortName">out_frame[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/ss/out_uart_sample" type="array">
+      <obj_property name="ElementShortName">out_uart_sample[15:0]</obj_property>
+      <obj_property name="ObjectShortName">out_uart_sample[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/ss/out_i2s441kH_sample" type="array">
+      <obj_property name="ElementShortName">out_i2s441kH_sample[15:0]</obj_property>
+      <obj_property name="ObjectShortName">out_i2s441kH_sample[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/i2s_instance/reg_sample" type="array">
+      <obj_property name="ElementShortName">reg_sample[23:0]</obj_property>
+      <obj_property name="ObjectShortName">reg_sample[23:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/i2s_instance/reg_out_MCLK" type="logic">
+      <obj_property name="ElementShortName">reg_out_MCLK</obj_property>
+      <obj_property name="ObjectShortName">reg_out_MCLK</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/i2s_instance/reg_out_BCLK" type="logic">
+      <obj_property name="ElementShortName">reg_out_BCLK</obj_property>
+      <obj_property name="ObjectShortName">reg_out_BCLK</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/i2s_instance/reg_out_PBLRC" type="logic">
+      <obj_property name="ElementShortName">reg_out_PBLRC</obj_property>
+      <obj_property name="ObjectShortName">reg_out_PBLRC</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/i2s_instance/reg_out_PBDAT" type="logic">
+      <obj_property name="ElementShortName">reg_out_PBDAT</obj_property>
+      <obj_property name="ObjectShortName">reg_out_PBDAT</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/u2s/out_frame" type="array">
+      <obj_property name="ElementShortName">out_frame[15:0]</obj_property>
+      <obj_property name="ObjectShortName">out_frame[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/bcs/in_frame" type="array">
+      <obj_property name="ElementShortName">in_frame[15:0]</obj_property>
+      <obj_property name="ObjectShortName">in_frame[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/bcs/out_frame" type="array">
+      <obj_property name="ElementShortName">out_frame[15:0]</obj_property>
+      <obj_property name="ObjectShortName">out_frame[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/ss/out_uart_sample" type="array">
+      <obj_property name="ElementShortName">out_uart_sample[15:0]</obj_property>
+      <obj_property name="ObjectShortName">out_uart_sample[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/u2s/in_uart_ready" type="logic">
+      <obj_property name="ElementShortName">in_uart_ready</obj_property>
+      <obj_property name="ObjectShortName">in_uart_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_main/m/u2s/out_ready" type="logic">
+      <obj_property name="ElementShortName">out_ready</obj_property>
+      <obj_property name="ObjectShortName">out_ready</obj_property>
+   </wvobject>
+</wave_config>

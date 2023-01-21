@@ -1,0 +1,14 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  \
+"../../../../TZ_BO_PRO.srcs/sources_1/new/bit_changer_seq.v" \
+"../../../../TZ_BO_PRO.srcs/sources_1/new/sample2uart.v" \
+"../../../../TZ_BO_PRO.srcs/sources_1/new/uart2sample.v" \
+"../../../../TZ_BO_PRO.srcs/sources_1/new/uart_rx.v" \
+"../../../../TZ_BO_PRO.srcs/sources_1/new/uart_tx.v" \
+"../../../../TZ_BO_PRO.srcs/sim_1/new/tb_uart_plus_bit_changer.v" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

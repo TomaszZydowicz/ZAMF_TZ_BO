@@ -1,0 +1,1 @@
+-wto "9a4406a795be4efe85987aaf363c399b" --incr --debug "typical" --relax --mt "2" -L "xil_defaultlib" -L "unisims_ver" -L "unimacro_ver" -L "secureip" --snapshot "tb_clk_devider_tomek_behav" "xil_defaultlib.tb_clk_devider_tomek" "xil_defaultlib.glbl" -log "elaborate.log" 
