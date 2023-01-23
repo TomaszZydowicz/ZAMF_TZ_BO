@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xc7z010clg400-1" LaunchTime="1674308891">
+<GenRun Id="synth_1" LaunchPart="xc7z010clg400-1" LaunchTime="1674486457">
   <File Type="PA-TCL" Name="design_1_wrapper.tcl"/>
   <File Type="RDS-PROPCONSTRS" Name="design_1_wrapper_drc_synth.rpt"/>
   <File Type="REPORTS-TCL" Name="design_1_wrapper_reports.tcl"/>
@@ -67,6 +67,13 @@
         <Attr Name="UsedIn" Val="simulation"/>
       </FileInfo>
     </File>
+    <File Path="$PSRCDIR/sources_1/new/tristate_buffer.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
     <File Path="$PSRCDIR/sources_1/bd/design_1/design_1.bd">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -122,10 +129,12 @@
   <BlockFileSet Type="BlockSrcs" Name="design_1_fifo_generator_0_0"/>
   <BlockFileSet Type="BlockSrcs" Name="design_1_processing_system7_0_1"/>
   <BlockFileSet Type="BlockSrcs" Name="design_1_clk_wiz_0_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="design_1_tristate_buffer_0_0"/>
   <BlockFileSet Type="BlockSrcs" Name="design_1_flip_flop_0_0"/>
   <BlockFileSet Type="BlockSrcs" Name="design_1_sample_switch_0_0"/>
   <BlockFileSet Type="BlockSrcs" Name="design_1_bit_changer_seq_0_0"/>
   <BlockFileSet Type="BlockSrcs" Name="design_1_i2s_0_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="design_1_tristate_buffer_1_0"/>
   <BlockFileSet Type="BlockSrcs" Name="design_1_flip_flop_1_0"/>
   <BlockFileSet Type="BlockSrcs" Name="design_1_uart_rx_0_0"/>
   <BlockFileSet Type="BlockSrcs" Name="design_1_uart_tx_0_0"/>

@@ -1,7 +1,7 @@
 //Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-//Date        : Sat Jan 21 14:45:12 2023
+//Date        : Mon Jan 23 16:07:15 2023
 //Host        : Dell running 64-bit major release  (build 9200)
 //Command     : generate_target design_1_wrapper.bd
 //Design      : design_1_wrapper
@@ -36,6 +36,8 @@ module design_1_wrapper
     ac_muten,
     ac_pbdat,
     ac_pblrc,
+    ac_scl,
+    ac_sda,
     eth_rst_b,
     rx_pmode,
     sysclk,
@@ -66,6 +68,8 @@ module design_1_wrapper
   output ac_muten;
   output ac_pbdat;
   output ac_pblrc;
+  inout ac_scl;
+  inout ac_sda;
   output [0:0]eth_rst_b;
   input rx_pmode;
   input sysclk;
@@ -97,6 +101,8 @@ module design_1_wrapper
   wire ac_muten;
   wire ac_pbdat;
   wire ac_pblrc;
+  wire ac_scl;
+  wire ac_sda;
   wire [0:0]eth_rst_b;
   wire rx_pmode;
   wire sysclk;
@@ -129,6 +135,8 @@ module design_1_wrapper
         .ac_muten(ac_muten),
         .ac_pbdat(ac_pbdat),
         .ac_pblrc(ac_pblrc),
+        .ac_scl(ac_scl),
+        .ac_sda(ac_sda),
         .eth_rst_b(eth_rst_b),
         .rx_pmode(rx_pmode),
         .sysclk(sysclk),

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Sat Jan 21 14:45:12 2023" VIVADOVERSION="2019.2">
+<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Mon Jan 23 16:07:16 2023" VIVADOVERSION="2019.2">
 
   <SYSTEMINFO ARCH="zynq" DEVICE="7z010" NAME="design_1" PACKAGE="clg400" SPEEDGRADE="-1"/>
 
@@ -152,6 +152,16 @@
     <PORT DIR="IO" LEFT="3" NAME="DDR_dqs_p" RIGHT="0" SIGIS="undef" SIGNAME="processing_system7_0_DDR_DQS">
       <CONNECTIONS>
         <CONNECTION INSTANCE="processing_system7_0" PORT="DDR_DQS"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="IO" NAME="ac_sda" SIGIS="data" SIGNAME="External_Ports_ac_sda">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="tristate_buffer_0" PORT="IO_Data"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="IO" NAME="ac_scl" SIGIS="undef" SIGNAME="External_Ports_ac_scl">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="tristate_buffer_1" PORT="IO_Data"/>
       </CONNECTIONS>
     </PORT>
   </EXTERNALPORTS>
@@ -2337,12 +2347,36 @@
         <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
       </PARAMETERS>
       <PORTS>
-        <PORT DIR="I" NAME="I2C1_SDA_I" SIGIS="undef"/>
-        <PORT DIR="O" NAME="I2C1_SDA_O" SIGIS="undef"/>
-        <PORT DIR="O" NAME="I2C1_SDA_T" SIGIS="undef"/>
-        <PORT DIR="I" NAME="I2C1_SCL_I" SIGIS="undef"/>
-        <PORT DIR="O" NAME="I2C1_SCL_O" SIGIS="undef"/>
-        <PORT DIR="O" NAME="I2C1_SCL_T" SIGIS="undef"/>
+        <PORT DIR="I" NAME="I2C1_SDA_I" SIGIS="undef" SIGNAME="tristate_buffer_0_Rx_Data">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="tristate_buffer_0" PORT="Rx_Data"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="I2C1_SDA_O" SIGIS="undef" SIGNAME="processing_system7_0_I2C1_SDA_O">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="tristate_buffer_0" PORT="Tx_Data"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="I2C1_SDA_T" SIGIS="undef" SIGNAME="processing_system7_0_I2C1_SDA_T">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="tristate_buffer_0" PORT="Tri_En"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="I2C1_SCL_I" SIGIS="undef" SIGNAME="tristate_buffer_1_Rx_Data">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="tristate_buffer_1" PORT="Rx_Data"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="I2C1_SCL_O" SIGIS="undef" SIGNAME="processing_system7_0_I2C1_SCL_O">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="tristate_buffer_1" PORT="Tx_Data"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="I2C1_SCL_T" SIGIS="undef" SIGNAME="processing_system7_0_I2C1_SCL_T">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="tristate_buffer_1" PORT="Tri_En"/>
+          </CONNECTIONS>
+        </PORT>
         <PORT DIR="O" NAME="M_AXI_GP0_ARVALID" SIGIS="undef"/>
         <PORT DIR="O" NAME="M_AXI_GP0_AWVALID" SIGIS="undef"/>
         <PORT DIR="O" NAME="M_AXI_GP0_BREADY" SIGIS="undef"/>
@@ -2744,6 +2778,66 @@
         <PORT DIR="O" NAME="i2s441kH_en" SIGIS="undef" SIGNAME="sample_switch_0_i2s441kH_en">
           <CONNECTIONS>
             <CONNECTION INSTANCE="i2s_0" PORT="in_en"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE COREREVISION="1" FULLNAME="/tristate_buffer_0" HWVERSION="1.0" INSTANCE="tristate_buffer_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="tristate_buffer" VLNV="xilinx.com:module_ref:tristate_buffer:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="Component_Name" VALUE="design_1_tristate_buffer_0_0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="IO" NAME="IO_Data" SIGIS="undef" SIGNAME="External_Ports_ac_sda">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="ac_sda"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="Tx_Data" SIGIS="undef" SIGNAME="processing_system7_0_I2C1_SDA_O">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="processing_system7_0" PORT="I2C1_SDA_O"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="Rx_Data" SIGIS="undef" SIGNAME="tristate_buffer_0_Rx_Data">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="processing_system7_0" PORT="I2C1_SDA_I"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="Tri_En" SIGIS="undef" SIGNAME="processing_system7_0_I2C1_SDA_T">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="processing_system7_0" PORT="I2C1_SDA_T"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE COREREVISION="1" FULLNAME="/tristate_buffer_1" HWVERSION="1.0" INSTANCE="tristate_buffer_1" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="tristate_buffer" VLNV="xilinx.com:module_ref:tristate_buffer:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="Component_Name" VALUE="design_1_tristate_buffer_1_0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="IO" NAME="IO_Data" SIGIS="undef" SIGNAME="External_Ports_ac_scl">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="ac_scl"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="Tx_Data" SIGIS="undef" SIGNAME="processing_system7_0_I2C1_SCL_O">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="processing_system7_0" PORT="I2C1_SCL_O"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="Rx_Data" SIGIS="undef" SIGNAME="tristate_buffer_1_Rx_Data">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="processing_system7_0" PORT="I2C1_SCL_I"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="Tri_En" SIGIS="undef" SIGNAME="processing_system7_0_I2C1_SCL_T">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="processing_system7_0" PORT="I2C1_SCL_T"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>

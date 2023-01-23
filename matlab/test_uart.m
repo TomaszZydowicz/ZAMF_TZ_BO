@@ -1,29 +1,19 @@
-% setting up the tune
 clear 
 close all
 
 [y,Fs] = audioread("snow_white_instant.wav");
-
-y = y(354:44100*2+354,1);
+y = y(354:640+354,1);
 y_coded = zeros(1,length(y)).';
-
 q = quantizer([16 15]);
 bin_y= num2bin(q,y);
-
-
-% sound(y, Fs);
 
 PORT = "COM5";
 BAUDRATE = 115200;
 BYTEORDER = "little-endian"; % "big-endian"
 
 serial_port = serialport(PORT,BAUDRATE,"ByteOrder",BYTEORDER);
-
 flush(serial_port);
-
 msg_coded = [];
-
-
 
 for i=1:1:length(y)
 
@@ -40,7 +30,6 @@ for i=1:1:length(y)
     y_coded(i) = y_c;
 end
 
-
 msg_text = bin2ASCII(msg_coded);
 
  function y = bin2ASCII(x)
@@ -53,5 +42,3 @@ msg_text = bin2ASCII(msg_coded);
                 t = t + 1;
             end
 end
-
-% sound(y_coded,Fs);

@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x398ADEDED69E82D9",
+      "boundary_crc": "0xEEB9CB35AED06D3",
       "device": "xc7z010clg400-1",
       "name": "design_1",
       "synth_flow_mode": "Hierarchical",
@@ -25,7 +25,9 @@
       "flip_flop_1": "",
       "xlconstant_4": "",
       "uart_rx_0": "",
-      "uart_tx_0": ""
+      "uart_tx_0": "",
+      "tristate_buffer_0": "",
+      "tristate_buffer_1": ""
     },
     "interface_ports": {
       "DDR": {
@@ -154,6 +156,19 @@
       },
       "ac_pblrc": {
         "direction": "O"
+      },
+      "ac_sda": {
+        "type": "data",
+        "direction": "IO",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "ac_scl": {
+        "direction": "IO"
       }
     },
     "components": {
@@ -785,6 +800,52 @@
             "direction": "O"
           }
         }
+      },
+      "tristate_buffer_0": {
+        "vlnv": "xilinx.com:module_ref:tristate_buffer:1.0",
+        "xci_name": "design_1_tristate_buffer_0_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "tristate_buffer",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "IO_Data": {
+            "direction": "IO"
+          },
+          "Tx_Data": {
+            "direction": "I"
+          },
+          "Rx_Data": {
+            "direction": "O"
+          },
+          "Tri_En": {
+            "direction": "I"
+          }
+        }
+      },
+      "tristate_buffer_1": {
+        "vlnv": "xilinx.com:module_ref:tristate_buffer:1.0",
+        "xci_name": "design_1_tristate_buffer_1_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "tristate_buffer",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "IO_Data": {
+            "direction": "IO"
+          },
+          "Tx_Data": {
+            "direction": "I"
+          },
+          "Rx_Data": {
+            "direction": "O"
+          },
+          "Tri_En": {
+            "direction": "I"
+          }
+        }
       }
     },
     "interface_nets": {
@@ -1025,6 +1086,54 @@
         "ports": [
           "xlconstant_4/dout",
           "flip_flop_1/enable"
+        ]
+      },
+      "processing_system7_0_I2C1_SDA_T": {
+        "ports": [
+          "processing_system7_0/I2C1_SDA_T",
+          "tristate_buffer_0/Tri_En"
+        ]
+      },
+      "processing_system7_0_I2C1_SDA_O": {
+        "ports": [
+          "processing_system7_0/I2C1_SDA_O",
+          "tristate_buffer_0/Tx_Data"
+        ]
+      },
+      "tristate_buffer_0_Rx_Data": {
+        "ports": [
+          "tristate_buffer_0/Rx_Data",
+          "processing_system7_0/I2C1_SDA_I"
+        ]
+      },
+      "Net": {
+        "ports": [
+          "ac_sda",
+          "tristate_buffer_0/IO_Data"
+        ]
+      },
+      "tristate_buffer_1_Rx_Data": {
+        "ports": [
+          "tristate_buffer_1/Rx_Data",
+          "processing_system7_0/I2C1_SCL_I"
+        ]
+      },
+      "processing_system7_0_I2C1_SCL_O": {
+        "ports": [
+          "processing_system7_0/I2C1_SCL_O",
+          "tristate_buffer_1/Tx_Data"
+        ]
+      },
+      "processing_system7_0_I2C1_SCL_T": {
+        "ports": [
+          "processing_system7_0/I2C1_SCL_T",
+          "tristate_buffer_1/Tri_En"
+        ]
+      },
+      "Net1": {
+        "ports": [
+          "ac_scl",
+          "tristate_buffer_1/IO_Data"
         ]
       }
     },

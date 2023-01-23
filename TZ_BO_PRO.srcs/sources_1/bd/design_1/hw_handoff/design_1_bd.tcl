@@ -40,7 +40,7 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 
 # The design that will be created by this Tcl script contains the following 
 # module references:
-# bit_changer_seq, flip_flop, flip_flop, i2s, sample2uart, sample_switch, uart2sample, uart_rx, uart_tx
+# bit_changer_seq, flip_flop, flip_flop, i2s, sample2uart, sample_switch, tristate_buffer, tristate_buffer, uart2sample, uart_rx, uart_tx
 
 # Please add the sources of those modules before sourcing this Tcl script.
 
@@ -173,6 +173,8 @@ proc create_root_design { parentCell } {
   set ac_muten [ create_bd_port -dir O ac_muten ]
   set ac_pbdat [ create_bd_port -dir O ac_pbdat ]
   set ac_pblrc [ create_bd_port -dir O ac_pblrc ]
+  set ac_scl [ create_bd_port -dir IO ac_scl ]
+  set ac_sda [ create_bd_port -dir IO -type data ac_sda ]
   set eth_rst_b [ create_bd_port -dir O -from 0 -to 0 eth_rst_b ]
   set rx_pmode [ create_bd_port -dir I -type data rx_pmode ]
   set sysclk [ create_bd_port -dir I -type clk -freq_hz 125000000 sysclk ]
@@ -314,6 +316,28 @@ proc create_root_design { parentCell } {
      return 1
    }
   
+  # Create instance: tristate_buffer_0, and set properties
+  set block_name tristate_buffer
+  set block_cell_name tristate_buffer_0
+  if { [catch {set tristate_buffer_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   } elseif { $tristate_buffer_0 eq "" } {
+     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   }
+  
+  # Create instance: tristate_buffer_1, and set properties
+  set block_name tristate_buffer
+  set block_cell_name tristate_buffer_1
+  if { [catch {set tristate_buffer_1 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   } elseif { $tristate_buffer_1 eq "" } {
+     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   }
+  
   # Create instance: uart2sample_0, and set properties
   set block_name uart2sample
   set block_cell_name uart2sample_0
@@ -378,6 +402,8 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net processing_system7_0_FIXED_IO [get_bd_intf_ports FIXED_IO] [get_bd_intf_pins processing_system7_0/FIXED_IO]
 
   # Create port connections
+  connect_bd_net -net Net [get_bd_ports ac_sda] [get_bd_pins tristate_buffer_0/IO_Data]
+  connect_bd_net -net Net1 [get_bd_ports ac_scl] [get_bd_pins tristate_buffer_1/IO_Data]
   connect_bd_net -net bit_changer_seq_0_out_frame [get_bd_pins bit_changer_seq_0/out_frame] [get_bd_pins fifo_generator_0/din]
   connect_bd_net -net bit_changer_seq_0_out_ready [get_bd_pins bit_changer_seq_0/out_ready] [get_bd_pins fifo_generator_0/wr_en]
   connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins bit_changer_seq_0/in_clk] [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins fifo_generator_0/clk] [get_bd_pins flip_flop_0/clk] [get_bd_pins flip_flop_1/clk] [get_bd_pins i2s_0/in_clk] [get_bd_pins sample2uart_0/in_clk] [get_bd_pins sample_switch_0/in_clk] [get_bd_pins uart2sample_0/in_clk] [get_bd_pins uart_rx_0/in_Clock] [get_bd_pins uart_tx_0/in_Clock]
@@ -393,6 +419,10 @@ proc create_root_design { parentCell } {
   connect_bd_net -net i2s_0_out_PBLRC [get_bd_ports ac_pblrc] [get_bd_pins i2s_0/out_PBLRC]
   connect_bd_net -net i2s_0_out_ready [get_bd_pins i2s_0/out_ready] [get_bd_pins sample_switch_0/in_i2s_ready]
   connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK]
+  connect_bd_net -net processing_system7_0_I2C1_SCL_O [get_bd_pins processing_system7_0/I2C1_SCL_O] [get_bd_pins tristate_buffer_1/Tx_Data]
+  connect_bd_net -net processing_system7_0_I2C1_SCL_T [get_bd_pins processing_system7_0/I2C1_SCL_T] [get_bd_pins tristate_buffer_1/Tri_En]
+  connect_bd_net -net processing_system7_0_I2C1_SDA_O [get_bd_pins processing_system7_0/I2C1_SDA_O] [get_bd_pins tristate_buffer_0/Tx_Data]
+  connect_bd_net -net processing_system7_0_I2C1_SDA_T [get_bd_pins processing_system7_0/I2C1_SDA_T] [get_bd_pins tristate_buffer_0/Tri_En]
   connect_bd_net -net rx_pmode_1 [get_bd_ports rx_pmode] [get_bd_pins flip_flop_0/D]
   connect_bd_net -net sample2uart_0_out_ready_sample_switch [get_bd_pins sample2uart_0/out_ready_sample_switch] [get_bd_pins sample_switch_0/in_sample2uart_ready]
   connect_bd_net -net sample2uart_0_out_ready_uart [get_bd_pins sample2uart_0/out_ready_uart] [get_bd_pins uart_tx_0/in_Tx_DV]
@@ -403,6 +433,8 @@ proc create_root_design { parentCell } {
   connect_bd_net -net sample_switch_0_out_uart_sample [get_bd_pins sample2uart_0/in_sample] [get_bd_pins sample_switch_0/out_uart_sample]
   connect_bd_net -net sample_switch_0_sample2uart_en [get_bd_pins sample2uart_0/in_en] [get_bd_pins sample_switch_0/sample2uart_en]
   connect_bd_net -net sysclk_1 [get_bd_ports sysclk] [get_bd_pins clk_wiz_0/clk_in1]
+  connect_bd_net -net tristate_buffer_0_Rx_Data [get_bd_pins processing_system7_0/I2C1_SDA_I] [get_bd_pins tristate_buffer_0/Rx_Data]
+  connect_bd_net -net tristate_buffer_1_Rx_Data [get_bd_pins processing_system7_0/I2C1_SCL_I] [get_bd_pins tristate_buffer_1/Rx_Data]
   connect_bd_net -net uart2sample_0_out_frame [get_bd_pins bit_changer_seq_0/in_frame] [get_bd_pins uart2sample_0/out_frame]
   connect_bd_net -net uart2sample_0_out_ready [get_bd_pins bit_changer_seq_0/in_enable] [get_bd_pins uart2sample_0/out_ready]
   connect_bd_net -net uart_rx_0_out_Rx_Byte [get_bd_pins uart2sample_0/in_uart_frame] [get_bd_pins uart_rx_0/out_Rx_Byte]

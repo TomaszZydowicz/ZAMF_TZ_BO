@@ -49,8 +49,8 @@ set_property -dict {PACKAGE_PIN R18 IOSTANDARD LVCMOS33} [get_ports ac_pbdat]
 set_property -dict {PACKAGE_PIN T19 IOSTANDARD LVCMOS33} [get_ports ac_pblrc]
 #set_property -dict { PACKAGE_PIN R16   IOSTANDARD LVCMOS33 } [get_ports { ac_recdat }]; #IO_L19P_T3_34 Sch=ac_recdat
 #set_property -dict { PACKAGE_PIN Y18   IOSTANDARD LVCMOS33 } [get_ports { ac_reclrc }]; #IO_L17P_T2_34 Sch=ac_reclrc
-#set_property -dict { PACKAGE_PIN N18   IOSTANDARD LVCMOS33 } [get_ports { ac_scl }]; #IO_L13P_T2_MRCC_34 Sch=ac_scl
-#set_property -dict { PACKAGE_PIN N17   IOSTANDARD LVCMOS33 } [get_ports { ac_sda }]; #IO_L23P_T3_34 Sch=ac_sda
+set_property -dict {PACKAGE_PIN N18 IOSTANDARD LVCMOS33} [get_ports ac_scl]
+set_property -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS33} [get_ports ac_sda]
 
 
 ##Additional Ethernet signals
@@ -204,11 +204,12 @@ set_property -dict {PACKAGE_PIN J15 IOSTANDARD LVCMOS33} [get_ports rx_pmode]
 
 
 
+
 create_debug_core u_ila_0 ila
 set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0]
 set_property ALL_PROBE_SAME_MU_CNT 1 [get_debug_cores u_ila_0]
 set_property C_ADV_TRIGGER false [get_debug_cores u_ila_0]
-set_property C_DATA_DEPTH 16384 [get_debug_cores u_ila_0]
+set_property C_DATA_DEPTH 32768 [get_debug_cores u_ila_0]
 set_property C_EN_STRG_QUAL false [get_debug_cores u_ila_0]
 set_property C_INPUT_PIPE_STAGES 0 [get_debug_cores u_ila_0]
 set_property C_TRIGIN_EN false [get_debug_cores u_ila_0]
@@ -216,20 +217,20 @@ set_property C_TRIGOUT_EN false [get_debug_cores u_ila_0]
 set_property port_width 1 [get_debug_ports u_ila_0/clk]
 connect_debug_port u_ila_0/clk [get_nets [list design_1_i/clk_wiz_0/inst/clk_out1]]
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe0]
-set_property port_width 16 [get_debug_ports u_ila_0/probe0]
-connect_debug_port u_ila_0/probe0 [get_nets [list {design_1_i/sample_switch_0/out_uart_sample[0]} {design_1_i/sample_switch_0/out_uart_sample[1]} {design_1_i/sample_switch_0/out_uart_sample[2]} {design_1_i/sample_switch_0/out_uart_sample[3]} {design_1_i/sample_switch_0/out_uart_sample[4]} {design_1_i/sample_switch_0/out_uart_sample[5]} {design_1_i/sample_switch_0/out_uart_sample[6]} {design_1_i/sample_switch_0/out_uart_sample[7]} {design_1_i/sample_switch_0/out_uart_sample[8]} {design_1_i/sample_switch_0/out_uart_sample[9]} {design_1_i/sample_switch_0/out_uart_sample[10]} {design_1_i/sample_switch_0/out_uart_sample[11]} {design_1_i/sample_switch_0/out_uart_sample[12]} {design_1_i/sample_switch_0/out_uart_sample[13]} {design_1_i/sample_switch_0/out_uart_sample[14]} {design_1_i/sample_switch_0/out_uart_sample[15]}]]
+set_property port_width 2 [get_debug_ports u_ila_0/probe0]
+connect_debug_port u_ila_0/probe0 [get_nets [list {design_1_i/sample_switch_0/in_mode[0]} {design_1_i/sample_switch_0/in_mode[1]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe1]
-set_property port_width 2 [get_debug_ports u_ila_0/probe1]
-connect_debug_port u_ila_0/probe1 [get_nets [list {design_1_i/sample_switch_0/in_mode[0]} {design_1_i/sample_switch_0/in_mode[1]}]]
+set_property port_width 16 [get_debug_ports u_ila_0/probe1]
+connect_debug_port u_ila_0/probe1 [get_nets [list {design_1_i/sample_switch_0/out_uart_sample[0]} {design_1_i/sample_switch_0/out_uart_sample[1]} {design_1_i/sample_switch_0/out_uart_sample[2]} {design_1_i/sample_switch_0/out_uart_sample[3]} {design_1_i/sample_switch_0/out_uart_sample[4]} {design_1_i/sample_switch_0/out_uart_sample[5]} {design_1_i/sample_switch_0/out_uart_sample[6]} {design_1_i/sample_switch_0/out_uart_sample[7]} {design_1_i/sample_switch_0/out_uart_sample[8]} {design_1_i/sample_switch_0/out_uart_sample[9]} {design_1_i/sample_switch_0/out_uart_sample[10]} {design_1_i/sample_switch_0/out_uart_sample[11]} {design_1_i/sample_switch_0/out_uart_sample[12]} {design_1_i/sample_switch_0/out_uart_sample[13]} {design_1_i/sample_switch_0/out_uart_sample[14]} {design_1_i/sample_switch_0/out_uart_sample[15]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe2]
-set_property port_width 16 [get_debug_ports u_ila_0/probe2]
-connect_debug_port u_ila_0/probe2 [get_nets [list {design_1_i/bit_changer_seq_0/out_frame[0]} {design_1_i/bit_changer_seq_0/out_frame[1]} {design_1_i/bit_changer_seq_0/out_frame[2]} {design_1_i/bit_changer_seq_0/out_frame[3]} {design_1_i/bit_changer_seq_0/out_frame[4]} {design_1_i/bit_changer_seq_0/out_frame[5]} {design_1_i/bit_changer_seq_0/out_frame[6]} {design_1_i/bit_changer_seq_0/out_frame[7]} {design_1_i/bit_changer_seq_0/out_frame[8]} {design_1_i/bit_changer_seq_0/out_frame[9]} {design_1_i/bit_changer_seq_0/out_frame[10]} {design_1_i/bit_changer_seq_0/out_frame[11]} {design_1_i/bit_changer_seq_0/out_frame[12]} {design_1_i/bit_changer_seq_0/out_frame[13]} {design_1_i/bit_changer_seq_0/out_frame[14]} {design_1_i/bit_changer_seq_0/out_frame[15]}]]
+set_property port_width 15 [get_debug_ports u_ila_0/probe2]
+connect_debug_port u_ila_0/probe2 [get_nets [list {design_1_i/bit_changer_seq_0/in_frame[1]} {design_1_i/bit_changer_seq_0/in_frame[2]} {design_1_i/bit_changer_seq_0/in_frame[3]} {design_1_i/bit_changer_seq_0/in_frame[4]} {design_1_i/bit_changer_seq_0/in_frame[5]} {design_1_i/bit_changer_seq_0/in_frame[6]} {design_1_i/bit_changer_seq_0/in_frame[7]} {design_1_i/bit_changer_seq_0/in_frame[8]} {design_1_i/bit_changer_seq_0/in_frame[9]} {design_1_i/bit_changer_seq_0/in_frame[10]} {design_1_i/bit_changer_seq_0/in_frame[11]} {design_1_i/bit_changer_seq_0/in_frame[12]} {design_1_i/bit_changer_seq_0/in_frame[13]} {design_1_i/bit_changer_seq_0/in_frame[14]} {design_1_i/bit_changer_seq_0/in_frame[15]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe3]
-set_property port_width 15 [get_debug_ports u_ila_0/probe3]
-connect_debug_port u_ila_0/probe3 [get_nets [list {design_1_i/bit_changer_seq_0/in_frame[1]} {design_1_i/bit_changer_seq_0/in_frame[2]} {design_1_i/bit_changer_seq_0/in_frame[3]} {design_1_i/bit_changer_seq_0/in_frame[4]} {design_1_i/bit_changer_seq_0/in_frame[5]} {design_1_i/bit_changer_seq_0/in_frame[6]} {design_1_i/bit_changer_seq_0/in_frame[7]} {design_1_i/bit_changer_seq_0/in_frame[8]} {design_1_i/bit_changer_seq_0/in_frame[9]} {design_1_i/bit_changer_seq_0/in_frame[10]} {design_1_i/bit_changer_seq_0/in_frame[11]} {design_1_i/bit_changer_seq_0/in_frame[12]} {design_1_i/bit_changer_seq_0/in_frame[13]} {design_1_i/bit_changer_seq_0/in_frame[14]} {design_1_i/bit_changer_seq_0/in_frame[15]}]]
+set_property port_width 16 [get_debug_ports u_ila_0/probe3]
+connect_debug_port u_ila_0/probe3 [get_nets [list {design_1_i/bit_changer_seq_0/out_frame[0]} {design_1_i/bit_changer_seq_0/out_frame[1]} {design_1_i/bit_changer_seq_0/out_frame[2]} {design_1_i/bit_changer_seq_0/out_frame[3]} {design_1_i/bit_changer_seq_0/out_frame[4]} {design_1_i/bit_changer_seq_0/out_frame[5]} {design_1_i/bit_changer_seq_0/out_frame[6]} {design_1_i/bit_changer_seq_0/out_frame[7]} {design_1_i/bit_changer_seq_0/out_frame[8]} {design_1_i/bit_changer_seq_0/out_frame[9]} {design_1_i/bit_changer_seq_0/out_frame[10]} {design_1_i/bit_changer_seq_0/out_frame[11]} {design_1_i/bit_changer_seq_0/out_frame[12]} {design_1_i/bit_changer_seq_0/out_frame[13]} {design_1_i/bit_changer_seq_0/out_frame[14]} {design_1_i/bit_changer_seq_0/out_frame[15]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe4]
 set_property port_width 1 [get_debug_ports u_ila_0/probe4]

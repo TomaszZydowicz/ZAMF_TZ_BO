@@ -1,78 +1,90 @@
 {
    "ActiveEmotionalView":"Default View",
-   "Default View_ScaleFactor":"0.723845",
-   "Default View_TopLeft":"-211,-19",
+   "Default View_ScaleFactor":"1.41048",
+   "Default View_TopLeft":"1652,0",
    "ExpandedHierarchyInLayout":"",
-   "guistr":"# # String gsaved with Nlview 7.0.21  2019-05-29 bk=1.5064 VDI=41 GEI=36 GUI=JA:9.0 non-TLS-threadsafe
+   "guistr":"# # String gsaved with Nlview 7.0.21  2019-05-29 bk=1.5064 VDI=41 GEI=36 GUI=JA:9.0 non-TLS
 #  -string -flagsOSRD
-preplace port DDR -pg 1 -lvl 10 -x 2900 -y 60 -defaultsOSRD
-preplace port FIXED_IO -pg 1 -lvl 10 -x 2900 -y 90 -defaultsOSRD
-preplace port sysclk -pg 1 -lvl 0 -x -100 -y 100 -defaultsOSRD
-preplace port rx_pmode -pg 1 -lvl 0 -x -100 -y 220 -defaultsOSRD
-preplace port tx_pmode -pg 1 -lvl 10 -x 2900 -y 500 -defaultsOSRD
-preplace port ac_bclk -pg 1 -lvl 10 -x 2900 -y 650 -defaultsOSRD
-preplace port ac_mclk -pg 1 -lvl 10 -x 2900 -y 780 -defaultsOSRD
-preplace port ac_muten -pg 1 -lvl 10 -x 2900 -y 750 -defaultsOSRD
-preplace port ac_pbdat -pg 1 -lvl 10 -x 2900 -y 680 -defaultsOSRD
-preplace port ac_pblrc -pg 1 -lvl 10 -x 2900 -y 710 -defaultsOSRD
-preplace portBus eth_rst_b -pg 1 -lvl 10 -x 2900 -y 880 -defaultsOSRD
-preplace inst clk_wiz_0 -pg 1 -lvl 3 -x 370 -y 100 -defaultsOSRD
-preplace inst fifo_generator_0 -pg 1 -lvl 7 -x 1730 -y 310 -defaultsOSRD
-preplace inst xlconstant_0 -pg 1 -lvl 5 -x 970 -y 280 -defaultsOSRD
-preplace inst xlconstant_1 -pg 1 -lvl 7 -x 1730 -y 100 -defaultsOSRD
-preplace inst xlconstant_2 -pg 1 -lvl 9 -x 2610 -y 1000 -defaultsOSRD
-preplace inst processing_system7_0 -pg 1 -lvl 9 -x 2610 -y 210 -defaultsOSRD
-preplace inst uart2sample_0 -pg 1 -lvl 5 -x 970 -y 140 -defaultsOSRD
-preplace inst sample2uart_0 -pg 1 -lvl 7 -x 1730 -y 580 -defaultsOSRD
-preplace inst bit_changer_seq_0 -pg 1 -lvl 6 -x 1320 -y 250 -defaultsOSRD
-preplace inst sample_switch_0 -pg 1 -lvl 8 -x 2140 -y 200 -defaultsOSRD
-preplace inst i2s_0 -pg 1 -lvl 9 -x 2610 -y 830 -defaultsOSRD
-preplace inst xlconstant_3 -pg 1 -lvl 1 -x 0 -y 380 -defaultsOSRD
-preplace inst flip_flop_0 -pg 1 -lvl 2 -x 180 -y 260 -defaultsOSRD
-preplace inst flip_flop_1 -pg 1 -lvl 9 -x 2610 -y 460 -defaultsOSRD
-preplace inst xlconstant_4 -pg 1 -lvl 8 -x 2140 -y 740 -defaultsOSRD
-preplace inst uart_rx_0 -pg 1 -lvl 4 -x 630 -y 50 -defaultsOSRD
-preplace inst uart_tx_0 -pg 1 -lvl 9 -x 2610 -y 620 -defaultsOSRD
-preplace netloc clk_wiz_0_clk_out1 1 1 8 90 160 N 160 470 120 780 220 1150 160 1480 160 1900 80 2410
-preplace netloc uart_rx_0_out_Rx_DV 1 4 1 790 40n
-preplace netloc uart_rx_0_out_Rx_Byte 1 4 1 770 60n
-preplace netloc uart2sample_0_out_frame 1 5 1 1140 130n
-preplace netloc uart2sample_0_out_ready 1 5 1 1130 150n
-preplace netloc xlconstant_0_dout 1 5 1 NJ 280
-preplace netloc bit_changer_seq_0_out_frame 1 6 1 1490 240n
-preplace netloc bit_changer_seq_0_out_ready 1 6 1 1470 260n
-preplace netloc sample_switch_0_fifo_en 1 6 3 1500 20 NJ 20 2360
-preplace netloc fifo_generator_0_dout 1 6 2 1530 170 1910J
-preplace netloc fifo_generator_0_empty 1 6 2 1540 180 1900J
-preplace netloc fifo_generator_0_prog_empty 1 7 1 1930 260n
-preplace netloc xlconstant_1_dout 1 7 1 1920J 100n
-preplace netloc sample2uart_0_out_ready_sample_switch 1 7 1 1910 200n
-preplace netloc i2s_0_out_ready 1 7 3 1930 70 NJ 70 2820
-preplace netloc sample_switch_0_out_uart_sample 1 6 3 1520 40 NJ 40 2340
-preplace netloc sample_switch_0_out_i2s441kH_sample 1 8 1 2370 160n
-preplace netloc sample_switch_0_sample2uart_en 1 6 3 1510 30 NJ 30 2350
-preplace netloc sample_switch_0_i2s441kH_en 1 8 1 2350 260n
-preplace netloc uart_tx_0_out_Tx_Active 1 6 4 1540 680 NJ 680 2340J 700 2800
-preplace netloc sample2uart_0_out_uart_frame 1 7 2 N 560 2400J
-preplace netloc sample2uart_0_out_ready_uart 1 7 2 NJ 580 2390
-preplace netloc xlconstant_2_dout 1 9 1 2880J 880n
-preplace netloc processing_system7_0_FCLK_CLK0 1 8 2 2420 100 2810
-preplace netloc sysclk_1 1 0 3 NJ 100 N 100 N
-preplace netloc i2s_0_out_BLCK 1 9 1 2830J 650n
-preplace netloc i2s_0_out_PBDAT 1 9 1 2840J 680n
-preplace netloc i2s_0_out_PBLRC 1 9 1 2850J 710n
-preplace netloc i2s_0_out_MUTE 1 9 1 2860J 750n
-preplace netloc i2s_0_out_MCLK 1 9 1 2870J 780n
-preplace netloc xlconstant_3_dout 1 1 1 80 260n
-preplace netloc rx_pmode_1 1 0 2 NJ 220 80
-preplace netloc flip_flop_0_out 1 2 2 270 40 460J
-preplace netloc uart_tx_0_out_Tx_Serial 1 8 2 2420 380 2810
-preplace netloc flip_flop_1_Q 1 9 1 2830 460n
-preplace netloc xlconstant_4_dout 1 8 1 2380 460n
-preplace netloc processing_system7_0_FIXED_IO 1 9 1 2840J 90n
-preplace netloc processing_system7_0_DDR 1 9 1 2830J 60n
-levelinfo -pg 1 -100 0 180 370 630 970 1320 1730 2140 2610 2900
-pagesize -pg 1 -db -bbox -sgen -220 -120 3040 1590
+preplace port DDR -pg 1 -lvl 9 -x 2570 -y 140 -defaultsOSRD
+preplace port FIXED_IO -pg 1 -lvl 9 -x 2570 -y 170 -defaultsOSRD
+preplace port sysclk -pg 1 -lvl 0 -x 0 -y 860 -defaultsOSRD
+preplace port rx_pmode -pg 1 -lvl 0 -x 0 -y 700 -defaultsOSRD
+preplace port tx_pmode -pg 1 -lvl 9 -x 2570 -y 770 -defaultsOSRD
+preplace port ac_bclk -pg 1 -lvl 9 -x 2570 -y 500 -defaultsOSRD
+preplace port ac_mclk -pg 1 -lvl 9 -x 2570 -y 640 -defaultsOSRD
+preplace port ac_muten -pg 1 -lvl 9 -x 2570 -y 610 -defaultsOSRD
+preplace port ac_pbdat -pg 1 -lvl 9 -x 2570 -y 530 -defaultsOSRD
+preplace port ac_pblrc -pg 1 -lvl 9 -x 2570 -y 560 -defaultsOSRD
+preplace port ac_sda -pg 1 -lvl 9 -x 2570 -y 60 -defaultsOSRD
+preplace port ac_scl -pg 1 -lvl 9 -x 2570 -y 320 -defaultsOSRD
+preplace portBus eth_rst_b -pg 1 -lvl 9 -x 2570 -y 890 -defaultsOSRD
+preplace inst clk_wiz_0 -pg 1 -lvl 1 -x 110 -y 860 -defaultsOSRD
+preplace inst fifo_generator_0 -pg 1 -lvl 6 -x 1580 -y 210 -defaultsOSRD
+preplace inst xlconstant_0 -pg 1 -lvl 4 -x 830 -y 860 -defaultsOSRD
+preplace inst xlconstant_1 -pg 1 -lvl 6 -x 1580 -y 600 -defaultsOSRD
+preplace inst xlconstant_2 -pg 1 -lvl 8 -x 2410 -y 890 -defaultsOSRD
+preplace inst processing_system7_0 -pg 1 -lvl 7 -x 2040 -y 250 -defaultsOSRD
+preplace inst uart2sample_0 -pg 1 -lvl 4 -x 830 -y 740 -defaultsOSRD
+preplace inst sample2uart_0 -pg 1 -lvl 6 -x 1580 -y 430 -defaultsOSRD
+preplace inst bit_changer_seq_0 -pg 1 -lvl 5 -x 1170 -y 760 -defaultsOSRD
+preplace inst sample_switch_0 -pg 1 -lvl 7 -x 2040 -y 550 -defaultsOSRD
+preplace inst i2s_0 -pg 1 -lvl 8 -x 2410 -y 560 -defaultsOSRD
+preplace inst xlconstant_3 -pg 1 -lvl 1 -x 110 -y 760 -defaultsOSRD
+preplace inst flip_flop_0 -pg 1 -lvl 2 -x 300 -y 760 -defaultsOSRD
+preplace inst flip_flop_1 -pg 1 -lvl 8 -x 2410 -y 770 -defaultsOSRD
+preplace inst xlconstant_4 -pg 1 -lvl 7 -x 2040 -y 770 -defaultsOSRD
+preplace inst uart_rx_0 -pg 1 -lvl 3 -x 530 -y 750 -defaultsOSRD
+preplace inst uart_tx_0 -pg 1 -lvl 5 -x 1170 -y 610 -defaultsOSRD
+preplace inst tristate_buffer_0 -pg 1 -lvl 8 -x 2410 -y 70 -defaultsOSRD
+preplace inst tristate_buffer_1 -pg 1 -lvl 8 -x 2410 -y 330 -defaultsOSRD
+preplace netloc clk_wiz_0_clk_out1 1 1 7 210 680 390 820 670 660 1000 510 1370 540 1820 680 2270
+preplace netloc uart_rx_0_out_Rx_DV 1 3 1 N 740
+preplace netloc uart_rx_0_out_Rx_Byte 1 3 1 N 760
+preplace netloc uart2sample_0_out_frame 1 4 1 990 730n
+preplace netloc uart2sample_0_out_ready 1 4 1 N 750
+preplace netloc xlconstant_0_dout 1 4 1 1010 790n
+preplace netloc bit_changer_seq_0_out_frame 1 5 1 1330 160n
+preplace netloc bit_changer_seq_0_out_ready 1 5 1 1350 180n
+preplace netloc sample_switch_0_fifo_en 1 5 3 1390 670 NJ 670 2250
+preplace netloc fifo_generator_0_dout 1 5 2 1410 340 1810
+preplace netloc fifo_generator_0_empty 1 5 2 1380 660 1830J
+preplace netloc fifo_generator_0_prog_empty 1 6 1 1800 210n
+preplace netloc xlconstant_1_dout 1 6 1 1790J 530n
+preplace netloc sample2uart_0_out_ready_sample_switch 1 6 1 1780 450n
+preplace netloc i2s_0_out_ready 1 6 3 1840 690 NJ 690 2540
+preplace netloc sample_switch_0_out_uart_sample 1 5 3 1410 530 1770J 430 2250
+preplace netloc sample_switch_0_out_i2s441kH_sample 1 7 1 2260 510n
+preplace netloc sample_switch_0_sample2uart_en 1 5 3 1400 680 1790J 700 2240
+preplace netloc sample_switch_0_i2s441kH_en 1 7 1 2280 580n
+preplace netloc uart_tx_0_out_Tx_Active 1 5 1 1360 420n
+preplace netloc sample2uart_0_out_uart_frame 1 4 3 1020 530 1340J 690 1760
+preplace netloc sample2uart_0_out_ready_uart 1 4 3 1010 520 NJ 520 1750
+preplace netloc xlconstant_2_dout 1 8 1 NJ 890
+preplace netloc processing_system7_0_FCLK_CLK0 1 6 2 1820 420 2250
+preplace netloc sysclk_1 1 0 1 NJ 860
+preplace netloc i2s_0_out_BLCK 1 8 1 2550J 500n
+preplace netloc i2s_0_out_PBDAT 1 8 1 NJ 530
+preplace netloc i2s_0_out_PBLRC 1 8 1 2550J 550n
+preplace netloc i2s_0_out_MUTE 1 8 1 NJ 610
+preplace netloc i2s_0_out_MCLK 1 8 1 2550J 630n
+preplace netloc xlconstant_3_dout 1 1 1 NJ 760
+preplace netloc rx_pmode_1 1 0 2 NJ 700 200J
+preplace netloc flip_flop_0_out 1 2 1 N 760
+preplace netloc uart_tx_0_out_Tx_Serial 1 5 3 1320 710 NJ 710 2250J
+preplace netloc flip_flop_1_Q 1 8 1 NJ 770
+preplace netloc xlconstant_4_dout 1 7 1 NJ 770
+preplace netloc processing_system7_0_I2C1_SDA_T 1 7 1 2260 80n
+preplace netloc processing_system7_0_I2C1_SDA_O 1 7 1 2250 60n
+preplace netloc tristate_buffer_0_Rx_Data 1 7 2 NJ 200 2540
+preplace netloc Net 1 8 1 NJ 60
+preplace netloc tristate_buffer_1_Rx_Data 1 7 2 NJ 260 2540
+preplace netloc processing_system7_0_I2C1_SCL_O 1 7 1 2270 280n
+preplace netloc processing_system7_0_I2C1_SCL_T 1 7 1 2260 300n
+preplace netloc Net1 1 8 1 NJ 320
+preplace netloc processing_system7_0_FIXED_IO 1 7 2 2270J 170 NJ
+preplace netloc processing_system7_0_DDR 1 7 2 NJ 140 NJ
+levelinfo -pg 1 0 110 300 530 830 1170 1580 2040 2410 2570
+pagesize -pg 1 -db -bbox -sgen -120 0 2710 950
 "
 }
 {

@@ -1,7 +1,7 @@
 //Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-//Date        : Sat Jan 21 14:45:12 2023
+//Date        : Mon Jan 23 16:07:15 2023
 //Host        : Dell running 64-bit major release  (build 9200)
 //Command     : generate_target design_1.bd
 //Design      : design_1
@@ -9,7 +9,7 @@
 //--------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CORE_GENERATION_INFO = "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=17,numReposBlks=17,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=9,numPkgbdBlks=0,bdsource=USER,da_ps7_cnt=2,synth_mode=OOC_per_IP}" *) (* HW_HANDOFF = "design_1.hwdef" *) 
+(* CORE_GENERATION_INFO = "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=19,numReposBlks=19,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=11,numPkgbdBlks=0,bdsource=USER,da_ps7_cnt=2,synth_mode=OOC_per_IP}" *) (* HW_HANDOFF = "design_1.hwdef" *) 
 module design_1
    (DDR_addr,
     DDR_ba,
@@ -37,6 +37,8 @@ module design_1
     ac_muten,
     ac_pbdat,
     ac_pblrc,
+    ac_scl,
+    ac_sda,
     eth_rst_b,
     rx_pmode,
     sysclk,
@@ -67,11 +69,15 @@ module design_1
   output ac_muten;
   output ac_pbdat;
   output ac_pblrc;
+  inout ac_scl;
+  (* X_INTERFACE_INFO = "xilinx.com:signal:data:1.0 DATA.AC_SDA DATA" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME DATA.AC_SDA, LAYERED_METADATA undef" *) inout ac_sda;
   output [0:0]eth_rst_b;
   (* X_INTERFACE_INFO = "xilinx.com:signal:data:1.0 DATA.RX_PMODE DATA" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME DATA.RX_PMODE, LAYERED_METADATA undef" *) input rx_pmode;
   (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 CLK.SYSCLK CLK" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME CLK.SYSCLK, CLK_DOMAIN design_1_sysclk, FREQ_HZ 125000000, INSERT_VIP 0, PHASE 0.000" *) input sysclk;
   (* X_INTERFACE_INFO = "xilinx.com:signal:data:1.0 DATA.TX_PMODE DATA" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME DATA.TX_PMODE, LAYERED_METADATA undef" *) output tx_pmode;
 
+  wire Net;
+  wire Net1;
   wire [15:0]bit_changer_seq_0_out_frame;
   wire bit_changer_seq_0_out_ready;
   wire clk_wiz_0_clk_out1;
@@ -108,6 +114,10 @@ module design_1
   wire processing_system7_0_FIXED_IO_PS_CLK;
   wire processing_system7_0_FIXED_IO_PS_PORB;
   wire processing_system7_0_FIXED_IO_PS_SRSTB;
+  wire processing_system7_0_I2C1_SCL_O;
+  wire processing_system7_0_I2C1_SCL_T;
+  wire processing_system7_0_I2C1_SDA_O;
+  wire processing_system7_0_I2C1_SDA_T;
   wire rx_pmode_1;
   wire sample2uart_0_out_ready_sample_switch;
   wire sample2uart_0_out_ready_uart;
@@ -118,6 +128,8 @@ module design_1
   wire [15:0]sample_switch_0_out_uart_sample;
   wire sample_switch_0_sample2uart_en;
   wire sysclk_1;
+  wire tristate_buffer_0_Rx_Data;
+  wire tristate_buffer_1_Rx_Data;
   wire [15:0]uart2sample_0_out_frame;
   wire uart2sample_0_out_ready;
   wire [7:0]uart_rx_0_out_Rx_Byte;
@@ -196,8 +208,12 @@ module design_1
         .DDR_VRP(FIXED_IO_ddr_vrp),
         .DDR_WEB(DDR_we_n),
         .FCLK_CLK0(processing_system7_0_FCLK_CLK0),
-        .I2C1_SCL_I(1'b0),
-        .I2C1_SDA_I(1'b0),
+        .I2C1_SCL_I(tristate_buffer_1_Rx_Data),
+        .I2C1_SCL_O(processing_system7_0_I2C1_SCL_O),
+        .I2C1_SCL_T(processing_system7_0_I2C1_SCL_T),
+        .I2C1_SDA_I(tristate_buffer_0_Rx_Data),
+        .I2C1_SDA_O(processing_system7_0_I2C1_SDA_O),
+        .I2C1_SDA_T(processing_system7_0_I2C1_SDA_T),
         .MIO(FIXED_IO_mio[53:0]),
         .M_AXI_GP0_ACLK(processing_system7_0_FCLK_CLK0),
         .M_AXI_GP0_ARREADY(1'b0),
@@ -235,6 +251,16 @@ module design_1
         .out_i2s441kH_sample(sample_switch_0_out_i2s441kH_sample),
         .out_uart_sample(sample_switch_0_out_uart_sample),
         .sample2uart_en(sample_switch_0_sample2uart_en));
+  design_1_tristate_buffer_0_0 tristate_buffer_0
+       (.IO_Data(ac_sda),
+        .Rx_Data(tristate_buffer_0_Rx_Data),
+        .Tri_En(processing_system7_0_I2C1_SDA_T),
+        .Tx_Data(processing_system7_0_I2C1_SDA_O));
+  design_1_tristate_buffer_1_0 tristate_buffer_1
+       (.IO_Data(ac_scl),
+        .Rx_Data(tristate_buffer_1_Rx_Data),
+        .Tri_En(processing_system7_0_I2C1_SCL_T),
+        .Tx_Data(processing_system7_0_I2C1_SCL_O));
   design_1_uart2sample_0_0 uart2sample_0
        (.in_clk(clk_wiz_0_clk_out1),
         .in_uart_frame(uart_rx_0_out_Rx_Byte),

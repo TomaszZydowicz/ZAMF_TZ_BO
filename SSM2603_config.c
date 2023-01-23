@@ -15,7 +15,7 @@ int main()
     writeReg(4, 0);
     writeReg(5, 0);
     writeReg(7, 0b000001001);
-    writeReg(8, 0b000111000);
+    writeReg(8, 0b000010100);
     usleep(1000);
     writeReg(9, 1);
     usleep(1000);
